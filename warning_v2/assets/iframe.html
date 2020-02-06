@@ -12,17 +12,19 @@
 
   <script id="requester-template" type="text/x-handlebars-template">
     <div class="header">
-      <div></div>
-        <div class="name">{{name}}</div>
-
-        <div class="icon_container">
-          <div class="icon icons">
-            <a target="_blank" href="https://accounts.planningcenteronline.com/O1/administration/people?email={{email}}"><img src="search.png"></a>
-          </div>
-          <div class="icons">
-            <a target="_blank" href="http://accounts.planningcenteronline.com/reset_password/{{email}}"><img src="password.png"></a>
-          </div>
+      <div class="icon_container">
+        <div class="icon icons">
+          <a target="_blank" href="https://accounts.planningcenteronline.com/O1/administration/people?email={{email}}"><img src="search.png"></a>
         </div>
+      </div>
+      
+      <div class="name">{{name}}</div>
+
+      <div class="icon_container">
+        <div class="icons">
+          <a target="_blank" href="http://accounts.planningcenteronline.com/reset_password/{{email}}"><img src="password.png"></a>
+        </div>
+      </div>
     </div>
   </script>
 
