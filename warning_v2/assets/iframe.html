@@ -7,6 +7,18 @@
 <body>
 
   <div id="requester-content"></div>
+  <ul class="nav nav-tabs" id="myTab" role="tablist">
+    <li class="nav-item">
+      <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Home</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Profile</a>
+    </li>
+  </ul>
+  <div class="tab-content" id="myTabContent">
+    <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">Content 1</div>
+    <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">Content 2</div>
+  </div>
   <div id="ticket-content"></div>
   <div id="notes-content"></div>
 
@@ -45,7 +57,7 @@
           {{#if RegistrationsTrial}}
             <img class="trial_icon" src="https://imgur.com/9VVSNwa.png">
           {{/if}}
-          {{#if ResourcesTrial}}
+          {{#if CalendarTrial}}
             <img class="trial_icon" src="https://imgur.com/9Vma6EL.png">
           {{/if}}
           {{#if ServicesTrial}}
@@ -118,6 +130,7 @@
 
   <script src="https://cdn.jsdelivr.net/handlebarsjs/4.0.8/handlebars.min.js"></script>
   <script src="https://cdn.jsdelivr.net/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
   <script type="text/javascript" src="https://assets.zendesk.com/apps/sdk/2.0/zaf_sdk.js"></script>
   <script type="text/javascript" src="main.js"></script>
 </body>
