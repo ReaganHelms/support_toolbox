@@ -12,17 +12,19 @@
 
   <script id="requester-template" type="text/x-handlebars-template">
     <div class="header">
-      <div></div>
-        <div class="name">{{name}}</div>
-
-        <div class="icon_container">
-          <div class="icon icons">
-            <a target="_blank" href="https://accounts.planningcenteronline.com/O1/administration/people?email={{email}}"><img src="search.png"></a>
-          </div>
-          <div class="icons">
-            <a target="_blank" href="http://accounts.planningcenteronline.com/reset_password/{{email}}"><img src="password.png"></a>
-          </div>
+      <div class="icon_container">
+        <div class="icon icons">
+          <a target="_blank" href="http://accounts.planningcenteronline.com/reset_password/{{email}}"><img src="password.png"></a>
         </div>
+      </div>
+      
+      <div class="name">{{name}}</div>
+
+      <div class="icon_container">
+        <div class="icons">
+          <a target="_blank" href="https://accounts.planningcenteronline.com/O1/administration/people?email={{email}}"><img src="search.png"></a>
+        </div>
+      </div>
     </div>
   </script>
 
@@ -33,23 +35,23 @@
       <div class="trials">
         <strong>Trials</strong>
         <div class="flexbox"">
+          {{#if CalendarTrial}}
+            <img class="trial_icon" src="product_icons/icon_calendar.png">
+          {{/if}}
           {{#if Check-InsTrial}}
-              <img class="trial_icon" src="https://imgur.com/i9xyWaJ.png">
+              <img class="trial_icon" src="product_icons/icon_check-ins.png">
           {{/if}}
           {{#if GivingTrial}}
-            <img class="trial_icon" src="https://imgur.com/uiqnPj4.png">
+            <img class="trial_icon" src="product_icons/icon_giving.png">
           {{/if}}
           {{#if GroupsTrial}}
-            <img class="trial_icon" src="https://imgur.com/xfGz7N3.png">
+            <img class="trial_icon" src="product_icons/icon_groups.png">
           {{/if}}
           {{#if RegistrationsTrial}}
-            <img class="trial_icon" src="https://imgur.com/9VVSNwa.png">
-          {{/if}}
-          {{#if CalendarTrial}}
-            <img class="trial_icon" src="https://imgur.com/9Vma6EL.png">
+            <img class="trial_icon" src="product_icons/icon_registrations.png">
           {{/if}}
           {{#if ServicesTrial}}
-            <img class="trial_icon" src="https://imgur.com/BPxuZ4t.png">
+            <img class="trial_icon" src="product_icons/icon_services.png">
           {{/if}}
         </div>
       </div>
