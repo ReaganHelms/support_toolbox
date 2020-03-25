@@ -5,30 +5,97 @@
   <link href="main.css" rel="stylesheet">
 </head>
 <body>
-  <!-- nav -->
-  <ul class="nav nav-tabs">
-    <li class="nav-item">
-      <a class="nav-link active" href="#">Customer</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="#">Apps</a>
-    </li>
-  </ul>
 
-  <!-- Ticket Requester Content-->
-  <div id="requester-content"></div>
-  <div id="ticket-content"></div>
-  <div id="notes-content"></div>
+<!-- nav --->
+<script>
+  
+function openTab(evt, tabName) {
+  var i, x, tablinks;
+  x = document.getElementsByClassName("tab-content");
+  for (i = 0; i < x.length; i++) {
+    x[i].style.display = "none";
+  }
+  tablinks = document.getElementsByClassName("tablink");
+  for (i = 0; i < x.length; i++) {
+    tablinks[i].className = tablinks[i].className.replace(" w3-red", "");
+  }
+  document.getElementById(tabName).style.display = "block";
+  evt.currentTarget.className += " w3-red";
+}
+
+</script>
+
+<div class="container">
+<div class="nav-bar">
+  <button class="tablink w3-red" onclick="openTab(event, 'customer')">Customer Info</button>
+  <button class="tablink" onclick="openTab(event, 'apps')">Mobile Apps</button>
+</div>
+  <!--- end nav --->  
+  
+  <!--- begin customer div --->
+<br/>
+<div id="customer" class="tab-content" style="display:inline;">
+   <!-- Ticket Requester Content-->
+   <div id="requester-content"></div>
+   <div id="ticket-content"></div>
+   <div id="notes-content"></div>
+</div>
+
+<!--- end customer div --->
+<!--- begin mobile apps div --->
+<div id="apps" class="tab-content" style="display:none">
+  <div class="container">
+  <h4><center>Current Production Version</center></h4>
+  <div class="app">
+    <div class="logo"><img width="35px" src="app-icon-check-ins-400.png" /></div>
+    <div class="version"><img width="15px" src="apple.svg" /> <span id="check"></span></div>
+    <!--div class="version"><img width="15px" src="android.png" /></div-->
+  </div>
+  <div class="app">
+    <div class="logo"><img width="35px" src="app-icon-church-center-400.png" /></div>
+    <div class="version"><img width="15px" src="apple.svg" /> <span id="cc"></span></div>
+    <!--div class="version"><img width="15px" src="android.png" /></div-->
+  </div>
+  <div class="app">
+    <div class="logo"><img width="35px" src="app-icon-headcounts-400.png" /></div>
+    <div class="version"><img width="15px" src="apple.svg" /> <span id="head"></span></div>
+    <!--div class="version"><img width="15px" src="android.png" /></div-->
+  </div>
+  <div class="app">
+    <div class="logo"><img width="35px" src="app-icon-music-stand-400.png" /></div>
+    <div class="version"><img width="15px" src="apple.svg" /> <span id="ms"></span></div>
+    <!--div class="version"><img width="15px" src="android.png" /></div-->
+  </div>
+  <div class="app">
+    <div class="logo"><img width="35px" src="app-icon-people-400.png" /></div>
+    <div class="version"><img width="15px" src="apple.svg" /> <span id="people"></span></div>
+    <!--div class="version"><img width="15px" src="android.png" /></div-->
+  </div>
+  <div class="app">
+    <div class="logo"><img width="35px" src="app-icon-calendar-400.png" /></div>
+    <div class="version"><img width="15px" src="apple.svg" /> <span id="res"></span></div>
+    <!--div class="version"><img width="15px" src="android.png" /></div-->
+  </div>
+  <div class="app">
+    <div class="logo"><img width="35px" src="app-icon-services-400.png" /></div>
+    <div class="version"><img width="15px" src="apple.svg" /> <span id="services"></span></div>
+    <!--div class="version"><img width="15px" src="android.png" /></div-->
+  </div>
+</div>
+</div>
+
 
   <script id="requester-template" type="text/x-handlebars-template">
     <div class="header">
       <div></div>
-        <div class="name">{{name}}</div>
 
         <div class="icon_container">
           <div class="icon icons">
             <a target="_blank" href="https://accounts.planningcenteronline.com/O1/administration/people?email={{email}}"><img src="search.png"></a>
           </div>
+        </div>
+        <div class="name">{{name}}</div>
+        <div class="icon_container">
           <div class="icons">
             <a target="_blank" href="http://accounts.planningcenteronline.com/reset_password/{{email}}"><img src="password.png"></a>
           </div>
@@ -130,6 +197,91 @@
   <script src="https://cdn.jsdelivr.net/jquery/3.2.1/jquery.min.js"></script>
   <script type="text/javascript" src="https://assets.zendesk.com/apps/sdk/2.0/zaf_sdk.js"></script>
   <script type="text/javascript" src="main.js"></script>
+
+
+<!---- js for app checkr --->
+
+<script src="https://static.zdassets.com/zendesk_app_framework_sdk/2.0/zaf_sdk.min.js"></script>
+  <script src="jquery-3.4.1.min.js"></script>
+  <script>
+    // Initialise Apps framework client. See also:
+    // https://developer.zendesk.com/apps/docs/developer-guide/getting_started
+    var client = ZAFClient.init();
+    client.invoke('resize', { width: '100%', height: '400px' });
+  
+        const api_url = 'https://cors-anywhere.herokuapp.com/https://itunes.apple.com/lookup?id='
+
+
+      async function services() {
+          const fri = await fetch(api_url + '327370808');
+          const dat = await fri.json();
+          const latitude = dat.results[0].version;
+
+          document.getElementById('services').textContent = latitude;
+      }
+
+      async function check() {
+          const fri = await fetch(api_url + '864291358');
+          const dat = await fri.json();
+          const latitude = dat.results[0].version;
+
+          document.getElementById('check').textContent = latitude;
+      }
+
+      async function cca() {
+          const fri = await fetch(api_url + '1357742931');
+          const dat = await fri.json();
+          const latitude = dat.results[0].version;
+
+          document.getElementById('cc').textContent = latitude;
+      }
+
+      async function head() {
+          const fri = await fetch(api_url + '1215339253');
+          const dat = await fri.json();
+          const latitude = dat.results[0].version;
+
+          document.getElementById('head').textContent = latitude;
+      }
+
+      async function music() {
+          const fri = await fetch(api_url + '368561278');
+          const dat = await fri.json();
+          const latitude = dat.results[0].version;
+
+          document.getElementById('ms').textContent = latitude;
+      }
+
+      async function people() {
+          const fri = await fetch(api_url + '1029697457');
+          const dat = await fri.json();
+          const latitude = dat.results[0].version;
+
+          document.getElementById('people').textContent = latitude;
+      }
+
+      async function resources() {
+          const fri = await fetch(api_url + '784966220');
+          const dat = await fri.json();
+          const latitude = dat.results[0].version;
+
+          document.getElementById('res').textContent = latitude;
+      }
+
+     
+          services();
+          check();
+          cca();
+          head();
+          music();
+          people();
+          resources();
+        
+      </script>
+
+
+
+</div>
 </body>
 
 </html>
