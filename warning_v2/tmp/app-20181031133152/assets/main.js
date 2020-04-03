@@ -1,6 +1,6 @@
 $(function() {
   var client = ZAFClient.init();
-  client.invoke('resize', { width: '100%', height: '425px' });
+  client.invoke('resize', { width: '100%', height: '250px' });
   
   client.get('ticket.requester.id').then(
     function(data) {
@@ -79,7 +79,7 @@ function showTicketInfo(data, notes) {
 
    var noTrial = true;
 
-  if(data.ticket.tags.join().match(/check_ins_trial|giving_trial|groups_trial|registrations_trial|calendar_trial|resources_trial|services_trial/g)) { 
+  if(data.ticket.tags.join().match(/check_ins_trial|giving_trial|groups_trial|registrations_trial|resources_trial|services_trial/g)) { 
     noTrial = false;
   }
 
@@ -101,14 +101,13 @@ function showTicketInfo(data, notes) {
     'GivingTrial': data.ticket.tags.includes('giving_trial'),
     'GroupsTrial': data.ticket.tags.includes('groups_trial'),
     'RegistrationsTrial': data.ticket.tags.includes('registrations_trial'),
-    'CalendarTrial': data.ticket.tags.includes('resources_trial') || data.ticket.tags.includes('calendar_trial'),
+    'ResourcesTrial': data.ticket.tags.includes('resources_trial'),
     'ServicesTrial': data.ticket.tags.includes('services_trial'),
     'noTrial': noTrial,
     'canada': data.ticket.tags.includes('canada'),
   };
   console.log ("here are the tags");
   console.log (data.ticket.tags);
-  console.log(ticket_data);
 
   var source = $("#ticket-template").html();
   var template = Handlebars.compile(source);
