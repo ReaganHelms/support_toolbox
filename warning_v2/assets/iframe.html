@@ -1,202 +1,191 @@
 <html>
-<head>
-  <meta charset="utf-8">
-  <link href="https://cdn.jsdelivr.net/bootstrap/2.3.2/css/bootstrap.min.css" rel="stylesheet">
-  <link href="main.css" rel="stylesheet">
-  <script language="javascript" type="text/javascript" src="navigation.js"></script>
-</head>
-<body>
+  <head>
+    <meta charset="utf-8">
+    <link href="https://cdn.jsdelivr.net/bootstrap/2.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="main.css" rel="stylesheet">
+    <script language="javascript" type="text/javascript" src="navigation.js"></script>
+  </head>
+  <body>
 
+    <div class="container">
+      <!-- nav --->
+      <div class="nav-bar">
+        <button class="tablink w3-red" onclick="openTab(event, 'customer')">Customer Info</button>
+        <button class="tablink" onclick="openTab(event, 'apps')">Mobile Apps</button>
+      </div>
+      <!--- end nav --->  
+      
+      <!--- begin customer div --->
+      <br/>
+      <div id="customer" class="tab-content" style="display:inline;">
+      <!-- Ticket Requester Content-->
+        <div id="requester-content"></div>
+        <div id="ticket-content"></div>
+        <div id="notes-content"></div>
+      </div>
 
-<div class="container">
-  <!-- nav --->
-  <div class="nav-bar">
-    <button class="tablink w3-red" onclick="openTab(event, 'customer')">Customer Info</button>
-    <button class="tablink" onclick="openTab(event, 'apps')">Mobile Apps</button>
-  </div>
-  <!--- end nav --->  
-  
-  <!--- begin customer div --->
-  <br/>
-  <div id="customer" class="tab-content" style="display:inline;">
-   <!-- Ticket Requester Content-->
-     <div id="requester-content"></div>
-     <div id="ticket-content"></div>
-     <div id="notes-content"></div>
-  </div>
-
-<!--- end customer div --->
-<!--- begin mobile apps div --->
-<div id="apps" class="tab-content" style="display:none">
-  <div class="container">
-  <h4><center>Current Production Version</center></h4>
-  <div class="app">
-    <div class="logo"><img width="35px" src="app-icon-check-ins-400.png" /></div>
-    <div class="version"><img width="15px" src="apple.svg" /> <span id="check"></span></div>
-    <!---div class="version"><img width="15px" src="android.png" /></div--->
-  </div>
-  <div class="app">
-    <div class="logo"><img width="35px" src="app-icon-church-center-400.png" /></div>
-    <div class="version"><img width="15px" src="apple.svg" /> <span id="cc"></span></div>
-    <!--div class="version"><img width="15px" src="android.png" /></div-->
-  </div>
-  <div class="app">
-    <div class="logo"><img width="35px" src="app-icon-headcounts-400.png" /></div>
-    <div class="version"><img width="15px" src="apple.svg" /> <span id="head"></span></div>
-    <!--div class="version"><img width="15px" src="android.png" /></div-->
-  </div>
-  <div class="app">
-    <div class="logo"><img width="35px" src="app-icon-music-stand-400.png" /></div>
-    <div class="version"><img width="15px" src="apple.svg" /> <span id="ms"></span></div>
-    <!--div class="version"><img width="15px" src="android.png" /></div-->
-  </div>
-  <div class="app">
-    <div class="logo"><img width="35px" src="app-icon-people-400.png" /></div>
-    <div class="version"><img width="15px" src="apple.svg" /> <span id="people"></span></div>
-    <!--div class="version"><img width="15px" src="android.png" /></div-->
-  </div>
-  <div class="app">
-    <div class="logo"><img width="35px" src="app-icon-calendar-400.png" /></div>
-    <div class="version"><img width="15px" src="apple.svg" /> <span id="cal"></span></div>
-    <!--div class="version"><img width="15px" src="android.png" /></div-->
-  </div>
-  <div class="app">
-    <div class="logo"><img width="35px" src="app-icon-services-400.png" /></div>
-    <div class="version"><img width="15px" src="apple.svg" /> <span id="services"></span></div>
-    <!---div class="version"><img width="15px" src="android.png" /> <span id="services2"></span></div--->
-  </div>
-
-
-
-
-
-
-
-</div>
-</div>
-
-
-  <script id="requester-template" type="text/x-handlebars-template">
-    <div class="header">
-      <div></div>
-
-        <div class="icon_container">
-          <div class="icon icons">
-            <a target="_blank" href="https://accounts.planningcenteronline.com/O1/administration/people?email={{email}}"><img src="search.png"></a>
+    <!--- end customer div --->
+    <!--- begin mobile apps div --->
+      <div id="apps" class="tab-content" style="display:none">
+        <div class="container">
+          <h4><center>Current Production Version</center></h4>
+          <div class="app">
+            <div class="logo"><img width="35px" src="app-icon-check-ins-400.png" /></div>
+            <div class="version"><img width="15px" src="apple.svg" /> <span id="check"></span></div>
+            <!---div class="version"><img width="15px" src="android.png" /></div--->
           </div>
-        </div>
-        <div class="name">{{name}}</div>
-        <div class="icon_container">
-          <div class="icons">
-            <a target="_blank" href="http://accounts.planningcenteronline.com/reset_password/{{email}}"><img src="password.png"></a>
+          <div class="app">
+            <div class="logo"><img width="35px" src="app-icon-church-center-400.png" /></div>
+            <div class="version"><img width="15px" src="apple.svg" /> <span id="cc"></span></div>
+            <!--div class="version"><img width="15px" src="android.png" /></div-->
           </div>
-        </div>
-    </div>
-  </script>
-
-  <script id="ticket-template" type="text/x-handlebars-template">
-
-    <!-- trials -->
-    {{#unless noTrial}}
-      <div class="trials">
-        <strong>Trials</strong>
-        <div class="flexbox"">
-          {{#if Check-InsTrial}}
-              <img class="trial_icon" src="https://imgur.com/i9xyWaJ.png">
-          {{/if}}
-          {{#if GivingTrial}}
-            <img class="trial_icon" src="https://imgur.com/uiqnPj4.png">
-          {{/if}}
-          {{#if GroupsTrial}}
-            <img class="trial_icon" src="https://imgur.com/xfGz7N3.png">
-          {{/if}}
-          {{#if RegistrationsTrial}}
-            <img class="trial_icon" src="https://imgur.com/9VVSNwa.png">
-          {{/if}}
-          {{#if CalendarTrial}}
-            <img class="trial_icon" src="https://imgur.com/9Vma6EL.png">
-          {{/if}}
-          {{#if ServicesTrial}}
-            <img class="trial_icon" src="https://imgur.com/BPxuZ4t.png">
-          {{/if}}
+          <div class="app">
+            <div class="logo"><img width="35px" src="app-icon-headcounts-400.png" /></div>
+            <div class="version"><img width="15px" src="apple.svg" /> <span id="head"></span></div>
+            <!--div class="version"><img width="15px" src="android.png" /></div-->
+          </div>
+          <div class="app">
+            <div class="logo"><img width="35px" src="app-icon-music-stand-400.png" /></div>
+            <div class="version"><img width="15px" src="apple.svg" /> <span id="ms"></span></div>
+            <!--div class="version"><img width="15px" src="android.png" /></div-->
+          </div>
+          <div class="app">
+            <div class="logo"><img width="35px" src="app-icon-people-400.png" /></div>
+            <div class="version"><img width="15px" src="apple.svg" /> <span id="people"></span></div>
+            <!--div class="version"><img width="15px" src="android.png" /></div-->
+          </div>
+          <div class="app">
+            <div class="logo"><img width="35px" src="app-icon-calendar-400.png" /></div>
+            <div class="version"><img width="15px" src="apple.svg" /> <span id="cal"></span></div>
+            <!--div class="version"><img width="15px" src="android.png" /></div-->
+          </div>
+          <div class="app">
+            <div class="logo"><img width="35px" src="app-icon-services-400.png" /></div>
+            <div class="version"><img width="15px" src="apple.svg" /> <span id="services"></span></div>
+            <!---div class="version"><img width="15px" src="android.png" /> <span id="services2"></span></div--->
+          </div>
         </div>
       </div>
-    {{/unless}}
-    <!-- user warnings -->
-    {{#if unicorn}}
-      <div class="title">🦄 is a Unicorn 🦄</div>
-    {{/if}}
 
-    {{#if vip}}
-      <div class="title">🏆 is a VIP 🏆</div>
-    {{/if}}
+      <script id="requester-template" type="text/x-handlebars-template">
+        <div class="header">
+          <div class="icon_container">
+            <div class="icon icons">
+              <a target="_blank" href="http://accounts.planningcenteronline.com/reset_password/{{email}}"><img src="password.png"></a>
+            </div>
+          </div>
+          
+          <div class="name">{{name}}</div>
 
-    {{#if power_user}}
-      <div class="title">🏋️ is a Power User 🏋️‍</div>
-    {{/if}}
+          <div class="icon_container">
+            <div class="icons">
+              <a target="_blank" href="https://accounts.planningcenteronline.com/O1/administration/people?email={{email}}"><img src="search.png"></a>
+            </div>
+          </div>
+        </div>
+      </script>
 
-    {{#if requested_feature}}
-      <div class="title">💡 has Requested a Feature 💡</div>
-    {{/if}}
+      <script id="ticket-template" type="text/x-handlebars-template">
 
-    {{#if beta}}
-      <div class="title">🤓 is in the Beta Group 🤓</div>
-    {{/if}}
-
-    {{#if canada}}
-      <div class="title">🇨🇦 Eh! 🇨🇦</div>
-    {{/if}}
-
-    {{#if pcu}}
-      <div class="title">🎓 has come to PCU 🎓</div>
-    {{/if}}
-
-    {{#if myplanningcenter}}
-      <div class="title">💖 My Planning Center 💖</div>
-    {{/if}}
-    
-    <!-- ticket warnings -->
-      <div class="flexbox">
-      {{#if triage}}
-        <img class="pico" src="https://i.imgur.com/9szRa6H.png">
-      {{/if}}
-
-      {{#if attachment}}
-            <img class="pico" src="https://i.imgur.com/XAHEQNX.png">
-      {{/if}}
-
-    <!-- no warning  -->
-        {{#if noWarning }}
-            <img class="pico" src="https://i.imgur.com/T6qC0fu.png">
+        <!-- trials -->
+        {{#unless noTrial}}
+          <div class="trials">
+            <strong>Trials</strong>
+            <div class="flexbox">
+              {{#if CalendarTrial}}
+                <img class="trial_icon" src="product_icons/icon_calendar.png">
+              {{/if}}
+              {{#if Check-InsTrial}}
+                  <img class="trial_icon" src="product_icons/icon_check-ins.png">
+              {{/if}}
+              {{#if GivingTrial}}
+                <img class="trial_icon" src="product_icons/icon_giving.png">
+              {{/if}}
+              {{#if GroupsTrial}}
+                <img class="trial_icon" src="product_icons/icon_groups.png">
+              {{/if}}
+              {{#if RegistrationsTrial}}
+                <img class="trial_icon" src="product_icons/icon_registrations.png">
+              {{/if}}
+              {{#if ServicesTrial}}
+                <img class="trial_icon" src="product_icons/icon_services.png">
+              {{/if}}
+            </div>
+          </div>
+        {{/unless}}
+        <!-- user warnings -->
+        {{#if unicorn}}
+          <div class="title">🦄 is a Unicorn 🦄</div>
         {{/if}}
-      </div>
-  </script>
 
-  <script id="notes-template" type="text/x-handlebars-template">
-    {{#if notes}}
-    <div class="flexbox">
-      <div class="person_notes">{{notes}}</div>
+        {{#if vip}}
+          <div class="title">🏆 is a VIP 🏆</div>
+        {{/if}}
+
+        {{#if power_user}}
+          <div class="title">🏋️ is a Power User 🏋️‍</div>
+        {{/if}}
+
+        {{#if requested_feature}}
+          <div class="title">💡 has Requested a Feature 💡</div>
+        {{/if}}
+
+        {{#if beta}}
+          <div class="title">🤓 is in the Beta Group 🤓</div>
+        {{/if}}
+
+        {{#if canada}}
+          <div class="title">🇨🇦 Eh! 🇨🇦</div>
+        {{/if}}
+
+        {{#if pcu}}
+          <div class="title">🎓 has come to PCU 🎓</div>
+        {{/if}}
+
+        {{#if myplanningcenter}}
+          <div class="title">💖 My Planning Center 💖</div>
+        {{/if}}
+        
+        <!-- ticket warnings -->
+          <div class="flexbox">
+          {{#if triage}}
+            <img class="pico" src="./triage.png">
+          {{/if}}
+
+          {{#if attachment}}
+                <img class="pico" src="./attachment.png">
+          {{/if}}
+
+        <!-- no warning  -->
+            {{#if noWarning }}
+                <img class="pico" src="./allClear.png">
+            {{/if}}
+          </div>
+      </script>
+
+      <script id="notes-template" type="text/x-handlebars-template">
+        {{#if notes}}
+        <div class="flexbox">
+          <div class="person_notes">{{notes}}</div>
+        </div>
+        {{/if}}
+      </script>
+
+      <script id="error-template" type="text/x-handlebars-template">
+        <p>{{status}} - {{statusText}} error. Please report a bug at the link below.</p>
+      </script>
+
+      <script src="https://cdn.jsdelivr.net/handlebarsjs/4.0.8/handlebars.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/jquery/3.2.1/jquery.min.js"></script>
+      <script type="text/javascript" src="https://assets.zendesk.com/apps/sdk/2.0/zaf_sdk.js"></script>
+
+
+    <!---- js for app checkr --->
+
+      <script src="https://static.zdassets.com/zendesk_app_framework_sdk/2.0/zaf_sdk.min.js"></script>
+      <script src="jquery-3.4.1.min.js"></script>
+
     </div>
-    {{/if}}
-  </script>
-
-  <script id="error-template" type="text/x-handlebars-template">
-    <p>{{status}} - {{statusText}} error. Please report a bug at the link below.</p>
-  </script>
-
-  <script src="https://cdn.jsdelivr.net/handlebarsjs/4.0.8/handlebars.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/jquery/3.2.1/jquery.min.js"></script>
-  <script type="text/javascript" src="https://assets.zendesk.com/apps/sdk/2.0/zaf_sdk.js"></script>
-
-
-<!---- js for app checkr --->
-
-<script src="https://static.zdassets.com/zendesk_app_framework_sdk/2.0/zaf_sdk.min.js"></script>
-  <script src="jquery-3.4.1.min.js"></script>
-
-
-</div>
-<script type="text/javascript" src="main.js"></script>
-</body>
-
+    <script type="text/javascript" src="main.js"></script>
+  </body>
 </html>
