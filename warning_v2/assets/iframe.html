@@ -3,43 +3,27 @@
   <meta charset="utf-8">
   <link href="https://cdn.jsdelivr.net/bootstrap/2.3.2/css/bootstrap.min.css" rel="stylesheet">
   <link href="main.css" rel="stylesheet">
+  <script language="javascript" type="text/javascript" src="navigation.js"></script>
 </head>
 <body>
 
-<!-- nav --->
-<script>
-  
-function openTab(evt, tabName) {
-  var i, x, tablinks;
-  x = document.getElementsByClassName("tab-content");
-  for (i = 0; i < x.length; i++) {
-    x[i].style.display = "none";
-  }
-  tablinks = document.getElementsByClassName("tablink");
-  for (i = 0; i < x.length; i++) {
-    tablinks[i].className = tablinks[i].className.replace(" w3-red", "");
-  }
-  document.getElementById(tabName).style.display = "block";
-  evt.currentTarget.className += " w3-red";
-}
-
-</script>
 
 <div class="container">
-<div class="nav-bar">
-  <button class="tablink w3-red" onclick="openTab(event, 'customer')">Customer Info</button>
-  <button class="tablink" onclick="openTab(event, 'apps')">Mobile Apps</button>
-</div>
+  <!-- nav --->
+  <div class="nav-bar">
+    <button class="tablink w3-red" onclick="openTab(event, 'customer')">Customer Info</button>
+    <button class="tablink" onclick="openTab(event, 'apps')">Mobile Apps</button>
+  </div>
   <!--- end nav --->  
   
   <!--- begin customer div --->
-<br/>
-<div id="customer" class="tab-content" style="display:inline;">
+  <br/>
+  <div id="customer" class="tab-content" style="display:inline;">
    <!-- Ticket Requester Content-->
-   <div id="requester-content"></div>
-   <div id="ticket-content"></div>
-   <div id="notes-content"></div>
-</div>
+     <div id="requester-content"></div>
+     <div id="ticket-content"></div>
+     <div id="notes-content"></div>
+  </div>
 
 <!--- end customer div --->
 <!--- begin mobile apps div --->
@@ -49,7 +33,7 @@ function openTab(evt, tabName) {
   <div class="app">
     <div class="logo"><img width="35px" src="app-icon-check-ins-400.png" /></div>
     <div class="version"><img width="15px" src="apple.svg" /> <span id="check"></span></div>
-    <!--div class="version"><img width="15px" src="android.png" /></div-->
+    <!---div class="version"><img width="15px" src="android.png" /></div--->
   </div>
   <div class="app">
     <div class="logo"><img width="35px" src="app-icon-church-center-400.png" /></div>
@@ -73,7 +57,7 @@ function openTab(evt, tabName) {
   </div>
   <div class="app">
     <div class="logo"><img width="35px" src="app-icon-calendar-400.png" /></div>
-    <div class="version"><img width="15px" src="apple.svg" /> <span id="res"></span></div>
+    <div class="version"><img width="15px" src="apple.svg" /> <span id="cal"></span></div>
     <!--div class="version"><img width="15px" src="android.png" /></div-->
   </div>
   <div class="app">
@@ -203,94 +187,16 @@ function openTab(evt, tabName) {
   <script src="https://cdn.jsdelivr.net/handlebarsjs/4.0.8/handlebars.min.js"></script>
   <script src="https://cdn.jsdelivr.net/jquery/3.2.1/jquery.min.js"></script>
   <script type="text/javascript" src="https://assets.zendesk.com/apps/sdk/2.0/zaf_sdk.js"></script>
-  <script type="text/javascript" src="main.js"></script>
 
 
 <!---- js for app checkr --->
 
 <script src="https://static.zdassets.com/zendesk_app_framework_sdk/2.0/zaf_sdk.min.js"></script>
   <script src="jquery-3.4.1.min.js"></script>
-  <script>
-    // Initialise Apps framework client. See also:
-    // https://developer.zendesk.com/apps/docs/developer-guide/getting_started
-    var client = ZAFClient.init();
-    client.invoke('resize', { width: '100%', height: '400px' });
-  
-        const api_url = 'https://cors-anywhere.herokuapp.com/https://itunes.apple.com/lookup?id='
-
-
-      async function services() {
-          const fri = await fetch(api_url + '327370808');
-          const dat = await fri.json();
-          const latitude = dat.results[0].version;
-
-          document.getElementById('services').textContent = latitude;
-      }
-
-      async function check() {
-          const fri = await fetch(api_url + '864291358');
-          const dat = await fri.json();
-          const latitude = dat.results[0].version;
-
-          document.getElementById('check').textContent = latitude;
-      }
-
-      async function cca() {
-          const fri = await fetch(api_url + '1357742931');
-          const dat = await fri.json();
-          const latitude = dat.results[0].version;
-
-          document.getElementById('cc').textContent = latitude;
-      }
-
-      async function head() {
-          const fri = await fetch(api_url + '1215339253');
-          const dat = await fri.json();
-          const latitude = dat.results[0].version;
-
-          document.getElementById('head').textContent = latitude;
-      }
-
-      async function music() {
-          const fri = await fetch(api_url + '368561278');
-          const dat = await fri.json();
-          const latitude = dat.results[0].version;
-
-          document.getElementById('ms').textContent = latitude;
-      }
-
-      async function people() {
-          const fri = await fetch(api_url + '1029697457');
-          const dat = await fri.json();
-          const latitude = dat.results[0].version;
-
-          document.getElementById('people').textContent = latitude;
-      }
-
-      async function resources() {
-          const fri = await fetch(api_url + '784966220');
-          const dat = await fri.json();
-          const latitude = dat.results[0].version;
-
-          document.getElementById('res').textContent = latitude;
-      }
-
-     
-          services();
-          check();
-          cca();
-          head();
-          music();
-          people();
-          resources();
-
-
-
-      </script>
-
 
 
 </div>
+<script type="text/javascript" src="main.js"></script>
 </body>
 
 </html>

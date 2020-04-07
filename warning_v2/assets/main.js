@@ -70,6 +70,7 @@ function showError(response) {
   $("#ticket-content").html(html);
 }
 
+
 function showTicketInfo(data, notes) {
   var noWarning = true;
 
@@ -126,3 +127,4 @@ function formatDate(date) {
   date = cdate.toLocaleDateString("en-us", options);
   return date;
 }
+
