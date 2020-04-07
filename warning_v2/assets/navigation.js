@@ -19,73 +19,68 @@ function openTab(evt, tabName) {
 
 // THIS IS FOR THE APP VERSION CHECKER
 
+const api_url = 'https://cors-anywhere.herokuapp.com/https://itunes.apple.com/lookup?id='
 
-  const api_url = 'https://cors-anywhere.herokuapp.com/https://itunes.apple.com/lookup?id='
+async function services() {
+  const fri = await fetch(api_url + '327370808');
+  const dat = await fri.json();
+  const latitude = dat.results[0].version;
 
+  document.getElementById('services').textContent = latitude;
+}
 
-      async function services() {
-          const fri = await fetch(api_url + '327370808');
-          const dat = await fri.json();
-          const latitude = dat.results[0].version;
+async function check() {
+  const fri = await fetch(api_url + '864291358');
+  const dat = await fri.json();
+  const latitude = dat.results[0].version;
 
-          document.getElementById('services').textContent = latitude;
-      }
+  document.getElementById('check').textContent = latitude;
+}
 
-      async function check() {
-          const fri = await fetch(api_url + '864291358');
-          const dat = await fri.json();
-          const latitude = dat.results[0].version;
+async function cca() {
+  const fri = await fetch(api_url + '1357742931');
+  const dat = await fri.json();
+  const latitude = dat.results[0].version;
 
-          document.getElementById('check').textContent = latitude;
-      }
+  document.getElementById('cc').textContent = latitude;
+}
 
-      async function cca() {
-          const fri = await fetch(api_url + '1357742931');
-          const dat = await fri.json();
-          const latitude = dat.results[0].version;
+async function head() {
+  const fri = await fetch(api_url + '1215339253');
+  const dat = await fri.json();
+  const latitude = dat.results[0].version;
 
-          document.getElementById('cc').textContent = latitude;
-      }
+  document.getElementById('head').textContent = latitude;
+}
 
-      async function head() {
-          const fri = await fetch(api_url + '1215339253');
-          const dat = await fri.json();
-          const latitude = dat.results[0].version;
+async function music() {
+  const fri = await fetch(api_url + '368561278');
+  const dat = await fri.json();
+  const latitude = dat.results[0].version;
 
-          document.getElementById('head').textContent = latitude;
-      }
+  document.getElementById('ms').textContent = latitude;
+}
 
-      async function music() {
-          const fri = await fetch(api_url + '368561278');
-          const dat = await fri.json();
-          const latitude = dat.results[0].version;
+async function people() {
+  const fri = await fetch(api_url + '1029697457');
+  const dat = await fri.json();
+  const latitude = dat.results[0].version;
 
-          document.getElementById('ms').textContent = latitude;
-      }
+  document.getElementById('people').textContent = latitude;
+}
 
-      async function people() {
-          const fri = await fetch(api_url + '1029697457');
-          const dat = await fri.json();
-          const latitude = dat.results[0].version;
+async function calendar() {
+  const fri = await fetch(api_url + '784966220');
+  const dat = await fri.json();
+  const latitude = dat.results[0].version;
 
-          document.getElementById('people').textContent = latitude;
-      }
+  document.getElementById('cal').textContent = latitude;
+}
 
-      async function calendar() {
-          const fri = await fetch(api_url + '784966220');
-          const dat = await fri.json();
-          const latitude = dat.results[0].version;
-
-          document.getElementById('cal').textContent = latitude;
-      }
-
-          services();
-          check();
-          cca();
-          head();
-          music();
-          people();
-          calendar();
-     
-
-
+services();
+check();
+cca();
+head();
+music();
+people();
+calendar();
