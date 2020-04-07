@@ -107,9 +107,9 @@ function showTicketInfo(data, notes) {
     'noTrial': noTrial,
     'canada': data.ticket.tags.includes('canada'),
   };
-  console.log ("here are the tags");
-  console.log (data.ticket.tags);
-  console.log(ticket_data);
+  // console.log ("here are the tags");
+  // console.log (data.ticket.tags);
+  // console.log (ticket_data);
 
   var source = $("#ticket-template").html();
   var template = Handlebars.compile(source);
