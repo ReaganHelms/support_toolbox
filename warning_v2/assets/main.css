@@ -1,6 +1,6 @@
 .header{
-  	display: flex;
-  	align-items: center;
+  display: flex;
+  align-items: center;
  	padding: 0.5em;
  	border-bottom: solid 1px #c9c9c9;
  	justify-content: center;
@@ -46,7 +46,6 @@
 }
 
 .namediv {
-
 	width: 100%;
 }
 

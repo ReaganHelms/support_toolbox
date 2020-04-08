@@ -30,6 +30,16 @@ function requestTicketInfo(client, id, notes) {
   client.request(settings).then(function(data) { showTicketInfo(data, notes) }, showError);
 }
 
+function findNewAndOpenTickets(client, email) {
+  var settings = {
+    url: `/api/v2/search.json?query=status<solved requester:${email} type:ticket`,
+    type:'GET',
+    dataType: 'json',
+  }
+
+  client.request(settings).then(function(data) {updateTicketInfo(client, data)}, showError);
+}
+
 function showInfo(client, data) {
 
   var requester_data = {
@@ -39,6 +49,7 @@ function showInfo(client, data) {
     'created_at': formatDate(data.user.created_at),
     'last_login_at': formatDate(data.user.last_login_at),
     'notes': data.user.notes,
+    
   };
 
   var source = $("#requester-template").html();  
@@ -50,6 +61,8 @@ function showInfo(client, data) {
   var notesTemplate = Handlebars.compile(notesSource);
   var notesHtml = notesTemplate(requester_data);
   $("#notes-content").html(notesHtml);
+
+  findNewAndOpenTickets(client, data.user.email);
 
   client.get('ticket.id').then(
     function(data) {
@@ -109,7 +122,7 @@ function showTicketInfo(data, notes) {
   };
   // console.log ("here are the tags");
   // console.log (data.ticket.tags);
-  // console.log (ticket_data);
+  // console.log (data);
 
   var source = $("#ticket-template").html();
   var template = Handlebars.compile(source);
@@ -128,3 +141,10 @@ function formatDate(date) {
   return date;
 }
 
+function updateTicketInfo(client, tickets) {
+  var openTicketsSource = $("#open-tickets").html();
+  var openTicketsTemplate = Handlebars.compile(openTicketsSource);
+  var openTicketsHtml = openTicketsTemplate({'numberOfOpenTickets': tickets.count});
+  $("#open-ticket-content").html(openTicketsHtml);
+  console.log(tickets);
+}
