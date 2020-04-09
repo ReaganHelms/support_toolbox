@@ -1,6 +1,6 @@
 $(function() {
   var client = ZAFClient.init();
-  client.invoke('resize', { width: '100%', height: '250px' });
+  client.invoke('resize', { width: '100%', height: '425px' });
   
   client.get('ticket.requester.id').then(
     function(data) {
@@ -70,6 +70,7 @@ function showError(response) {
   $("#ticket-content").html(html);
 }
 
+
 function showTicketInfo(data, notes) {
   var noWarning = true;
 
@@ -106,9 +107,9 @@ function showTicketInfo(data, notes) {
     'noTrial': noTrial,
     'canada': data.ticket.tags.includes('canada'),
   };
-  console.log ("here are the tags");
-  console.log (data.ticket.tags);
-  console.log(ticket_data);
+  // console.log ("here are the tags");
+  // console.log (data.ticket.tags);
+  // console.log (ticket_data);
 
   var source = $("#ticket-template").html();
   var template = Handlebars.compile(source);
@@ -126,3 +127,4 @@ function formatDate(date) {
   date = cdate.toLocaleDateString("en-us", options);
   return date;
 }
+
