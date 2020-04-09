@@ -84,3 +84,71 @@ head();
 music();
 people();
 calendar();
+
+
+// NOW TO GET THE ANDROID VERSIONS
+
+const android_url = "https://api.appmonsta.com/v1/stores/android/details/";
+const android_end_url = ".json?country=US";
+
+async function services_a() {
+ const response = await fetch(android_url + 'com.ministrycentered.PlanningCenter' + android_end_url, {method: 'GET', headers: new Headers({'Authorization': 'Basic ' + btoa('5bfe013167c034b97875e2c4d1b5d5ff6d4946a5:x'),'Content-Type': 'application/json'}),});
+ const dat = await response.json();
+ const ver = dat.version;
+ if (ver == 'Varies with device') {document.getElementById('services2').textContent = 'Varies';} else {document.getElementById('services2').textContent = ver;} 
+}
+
+async function check_a() {
+ const response = await fetch(android_url + 'com.ministrycentered.checkins' + android_end_url, {method: 'GET', headers: new Headers({'Authorization': 'Basic ' + btoa('5bfe013167c034b97875e2c4d1b5d5ff6d4946a5:x'),'Content-Type': 'application/json'}),});
+ const dat = await response.json();
+ const ver = dat.version;
+ if (ver == 'Varies with device') {document.getElementById('check2').textContent = 'Varies';} else {document.getElementById('check2').textContent = ver;} 
+}
+
+async function cca_a() {
+ const response = await fetch(android_url + 'com.ministrycentered.churchcenter' + android_end_url, {method: 'GET', headers: new Headers({'Authorization': 'Basic ' + btoa('5bfe013167c034b97875e2c4d1b5d5ff6d4946a5:x'),'Content-Type': 'application/json'}),});
+ const dat = await response.json();
+ const ver = dat.version;
+ if (ver == 'Varies with device') {document.getElementById('cc2').textContent = 'Varies';} else {document.getElementById('cc2').textContent = ver;} 
+}
+
+async function head_a() {
+ const response = await fetch(android_url + 'com.ministrycentered.headcounts' + android_end_url, {method: 'GET', headers: new Headers({'Authorization': 'Basic ' + btoa('5bfe013167c034b97875e2c4d1b5d5ff6d4946a5:x'),'Content-Type': 'application/json'}),});
+ const dat = await response.json();
+ const ver = dat.version;
+ if (ver == 'Varies with device') {document.getElementById('head2').textContent = 'Varies';} else {document.getElementById('head2').textContent = ver;} 
+}
+
+async function music_a() {
+ const response = await fetch(android_url + 'com.ministrycentered.musicstand' + android_end_url, {method: 'GET', headers: new Headers({'Authorization': 'Basic ' + btoa('5bfe013167c034b97875e2c4d1b5d5ff6d4946a5:x'),'Content-Type': 'application/json'}),});
+ const dat = await response.json();
+ const ver = dat.version;
+ if (ver == 'Varies with device') {document.getElementById('ms2').textContent = 'Varies';} else {document.getElementById('ms2').textContent = ver;} 
+}
+
+async function people_a() {
+ const response = await fetch(android_url + 'com.ministrycentered.people' + android_end_url, {method: 'GET', headers: new Headers({'Authorization': 'Basic ' + btoa('5bfe013167c034b97875e2c4d1b5d5ff6d4946a5:x'),'Content-Type': 'application/json'}),});
+ const dat = await response.json();
+ const ver = dat.version;
+ if (ver == 'Varies with device') {document.getElementById('people2').textContent = 'Varies';} else {document.getElementById('people2').textContent = ver;} 
+}
+
+async function calendar_a() {
+ const response = await fetch(android_url + 'com.ministrycentered.resources' + android_end_url, {method: 'GET', headers: new Headers({'Authorization': 'Basic ' + btoa('5bfe013167c034b97875e2c4d1b5d5ff6d4946a5:x'),'Content-Type': 'application/json'}),});
+ const dat = await response.json();
+ const ver = dat.version;
+ if (ver == 'Varies with device') {document.getElementById('cal2').textContent = 'Varies';} else {document.getElementById('cal2').textContent = ver;} 
+}
+
+
+
+services_a();
+check_a();
+cca_a();
+head_a();
+music_a();
+people_a();
+calendar_a();
+
+
+
