@@ -31,13 +31,22 @@ function requestTicketInfo(client, id, notes) {
 }
 
 function findNewAndOpenTickets(client, email) {
+  var recentTicketCount = 0;
   var settings = {
     url: `/api/v2/search.json?query=status<solved requester:${email} type:ticket`,
     type:'GET',
     dataType: 'json',
   }
 
-  client.request(settings).then(function(data) {updateTicketInfo(client, data)}, showError);
+  client.request(settings).then(function(data) {
+    console.log(`Data from request`);
+    console.log(data);
+    recentTicketCount = data;
+    updateTicketInfo(client, data)
+  }, showError);
+
+  console.log(`recentTicketCount`);
+  console.log(recentTicketCount);
 }
 
 function showInfo(client, data) {
@@ -146,5 +155,5 @@ function updateTicketInfo(client, tickets) {
   var openTicketsTemplate = Handlebars.compile(openTicketsSource);
   var openTicketsHtml = openTicketsTemplate({'numberOfOpenTickets': tickets.count});
   $("#open-ticket-content").html(openTicketsHtml);
-  console.log(tickets);
+  // console.log(tickets);
 }
