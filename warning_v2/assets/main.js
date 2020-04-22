@@ -33,11 +33,9 @@ function requestTicketInfo(client, id, notes) {
 }
 
 function findNewAndOpenTickets(client, email) {
-  var recentTicketCount = 0;
   var d = new Date();
   var twoDaysAgo = new Date(d.setDate(d.getDate() - 2));
   var searchDate =  `${twoDaysAgo.getFullYear()}-${("0" + (twoDaysAgo.getMonth() + 1)).slice(-2)}-${("0" + twoDaysAgo.getDate()).slice(-2)}`;
-  console.log(`The searchDate is ${searchDate}`);
   var settings = {
     url: `/api/v2/search.json?query=created>${searchDate} requester:${email} type:ticket`,
     type:'GET',
@@ -47,12 +45,8 @@ function findNewAndOpenTickets(client, email) {
   client.request(settings).then(function(data) {
     console.log(`Data from request`);
     console.log(data);
-    recentTicketCount = data;
-    updateTicketInfo(client, data)
+    updateTicketInfo(data)
   }, showError);
-
-  console.log(`recentTicketCount`);
-  console.log(recentTicketCount);
 }
 
 function showInfo(client, data) {
@@ -156,10 +150,11 @@ function formatDate(date) {
   return date;
 }
 
-function updateTicketInfo(client, tickets) {
-  var openTicketsSource = $("#open-tickets").html();
-  var openTicketsTemplate = Handlebars.compile(openTicketsSource);
-  var openTicketsHtml = openTicketsTemplate({'numberOfOpenTickets': tickets.count});
-  $("#open-ticket-content").html(openTicketsHtml);
-  // console.log(tickets);
+function updateTicketInfo(tickets) {
+  if(tickets.count > 1){
+    var openTicketsSource = $("#open-tickets").html();
+    var openTicketsTemplate = Handlebars.compile(openTicketsSource);
+    var openTicketsHtml = openTicketsTemplate({'numberOfOpenTickets': tickets.count});
+    $("#open-ticket-content").html(openTicketsHtml);
+  }
 }

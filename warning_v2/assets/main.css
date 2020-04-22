@@ -128,3 +128,9 @@
 .w3-red {
   background-color: #efefef;
 }
+
+#recent-tickets-alert {
+	margin-top: 10px;
+	margin-bottom: 0px;
+	text-align: center;
+}
