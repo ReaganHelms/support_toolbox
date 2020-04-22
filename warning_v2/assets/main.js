@@ -35,13 +35,11 @@ function requestTicketInfo(client, id, notes) {
 function findNewAndOpenTickets(client, email) {
   var recentTicketCount = 0;
   var d = new Date();
-  var twoDaysAgo = d.setDate(d.getDate() - 2)
-  console.log(twoDaysAgo);
-  console.log(typeof twoDaysAgo);
-  var searchDate = `${twoDaysAgo}`
-  console.log(`The twoDaysAgo variable is ${searchDate}.`);
+  var twoDaysAgo = new Date(d.setDate(d.getDate() - 2));
+  var searchDate =  `${twoDaysAgo.getFullYear()}-${("0" + (twoDaysAgo.getMonth() + 1)).slice(-2)}-${("0" + twoDaysAgo.getDate()).slice(-2)}`;
+  console.log(`The searchDate is ${searchDate}`);
   var settings = {
-    url: `/api/v2/search.json?query=status<solved requester:${email} type:ticket`,
+    url: `/api/v2/search.json?query=created>${searchDate} requester:${email} type:ticket`,
     type:'GET',
     dataType: 'json',
   }
