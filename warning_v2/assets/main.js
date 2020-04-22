@@ -1,3 +1,5 @@
+console.log(`Version 1`)
+
 $(function() {
   var client = ZAFClient.init();
   client.invoke('resize', { width: '100%', height: '425px' });
@@ -32,6 +34,12 @@ function requestTicketInfo(client, id, notes) {
 
 function findNewAndOpenTickets(client, email) {
   var recentTicketCount = 0;
+  var d = new Date();
+  var twoDaysAgo = d.setDate(d.getDate() - 2)
+  console.log(twoDaysAgo);
+  console.log(typeof twoDaysAgo);
+  var searchDate = `${twoDaysAgo}`
+  console.log(`The twoDaysAgo variable is ${searchDate}.`);
   var settings = {
     url: `/api/v2/search.json?query=status<solved requester:${email} type:ticket`,
     type:'GET',
