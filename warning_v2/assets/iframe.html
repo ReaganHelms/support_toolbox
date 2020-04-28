@@ -21,6 +21,7 @@
       <div id="customer" class="tab-content" style="display:inline;">
       <!-- Ticket Requester Content-->
         <div id="requester-content"></div>
+        <div id="open-ticket-content"></div>
         <div id="ticket-content"></div>
         <div id="notes-content"></div>
       </div>
@@ -83,6 +84,12 @@
               <a target="_blank" href="https://accounts.planningcenteronline.com/O1/administration/people?email={{email}}"><img src="search.png"></a>
             </div>
           </div>
+        </div>
+      </script>
+
+      <script id="open-tickets" type="text/x-handlebars-template">
+        <div id="recent-tickets-alert" class="alert alert-danger" role="alert">
+          This user has other recent tickets!
         </div>
       </script>
 

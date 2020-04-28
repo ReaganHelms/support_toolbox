@@ -1,4 +1,3 @@
-
 // TO ADD THE TABBED NAVIGATION
 
 function openTab(evt, tabName) {
@@ -48,6 +47,21 @@ function requestTicketInfo(client, id, notes) {
   client.request(settings).then(function(data) { showTicketInfo(data, notes) }, showError);
 }
 
+function findNewAndOpenTickets(client, email) {
+  var d = new Date();
+  var twoDaysAgo = new Date(d.setDate(d.getDate() - 2));
+  var searchDate =  `${twoDaysAgo.getFullYear()}-${("0" + (twoDaysAgo.getMonth() + 1)).slice(-2)}-${("0" + twoDaysAgo.getDate()).slice(-2)}`;
+  var settings = {
+    url: `/api/v2/search.json?query=created>${searchDate} requester:${email} type:ticket`,
+    type:'GET',
+    dataType: 'json',
+  }
+
+  client.request(settings).then(function(data) {
+    updateTicketInfo(data)
+  }, showError);
+}
+
 function showInfo(client, data) {
 
   var requester_data = {
@@ -57,6 +71,7 @@ function showInfo(client, data) {
     'created_at': formatDate(data.user.created_at),
     'last_login_at': formatDate(data.user.last_login_at),
     'notes': data.user.notes,
+    
   };
 
   var source = $("#requester-template").html();  
@@ -68,6 +83,8 @@ function showInfo(client, data) {
   var notesTemplate = Handlebars.compile(notesSource);
   var notesHtml = notesTemplate(requester_data);
   $("#notes-content").html(notesHtml);
+
+  findNewAndOpenTickets(client, data.user.email);
 
   client.get('ticket.id').then(
     function(data) {
@@ -127,7 +144,7 @@ function showTicketInfo(data, notes) {
   };
   // console.log ("here are the tags");
   // console.log (data.ticket.tags);
-  // console.log (ticket_data);
+  // console.log (data);
 
   var source = $("#ticket-template").html();
   var template = Handlebars.compile(source);
@@ -146,3 +163,11 @@ function formatDate(date) {
   return date;
 }
 
+function updateTicketInfo(tickets) {
+  if(tickets.count > 1){
+    var openTicketsSource = $("#open-tickets").html();
+    var openTicketsTemplate = Handlebars.compile(openTicketsSource);
+    var openTicketsHtml = openTicketsTemplate({'numberOfOpenTickets': tickets.count});
+    $("#open-ticket-content").html(openTicketsHtml);
+  }
+}
