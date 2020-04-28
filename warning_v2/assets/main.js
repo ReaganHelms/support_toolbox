@@ -1,5 +1,3 @@
-console.log('Verson 1.1');
-
 // TO ADD THE TABBED NAVIGATION
 
 function openTab(evt, tabName) {
