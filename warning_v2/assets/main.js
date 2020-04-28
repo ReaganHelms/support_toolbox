@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-console.log(`Version 1`)
-=======
-
 // TO ADD THE TABBED NAVIGATION
 
 function openTab(evt, tabName) {
@@ -18,7 +14,6 @@ function openTab(evt, tabName) {
   evt.currentTarget.className += " w3-red";
 }
 
->>>>>>> master
 
 $(function() {
   var client = ZAFClient.init();
