@@ -58,8 +58,6 @@ function findNewAndOpenTickets(client, email) {
   }
 
   client.request(settings).then(function(data) {
-    console.log(`Data from request`);
-    console.log(data);
     updateTicketInfo(data)
   }, showError);
 }
