@@ -17,7 +17,7 @@ function openTab(evt, tabName) {
 
 $(function() {
   var client = ZAFClient.init();
-  client.invoke('resize', { width: '100%', height: '425px' });
+  client.invoke('resize', { width: '100%', height: '325px' });
   
   client.get('ticket.requester.id').then(
     function(data) {
@@ -26,6 +26,7 @@ $(function() {
     }
   );
 });
+
 
 function requestUserInfo(client, id) {
   var settings = {
@@ -171,3 +172,7 @@ function updateTicketInfo(tickets) {
     $("#open-ticket-content").html(openTicketsHtml);
   }
 }
+
+
+
+
