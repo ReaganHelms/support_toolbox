@@ -1,39 +1,83 @@
 
-/*  THIS IS WHERE WE SETUP THE COOKIE FUNCTIONS  */
 
-function setCookie(cname, cvalue, exdays) {
-  var d = new Date();
-  d.setTime(d.getTime() + (exdays * 4 * 60 * 60 * 1000));
-  var expires = "expires="+d.toUTCString();
-  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+function setKey(key, val) {
+  return localStorage.setItem(key, val);
+};
+
+function getKey(key) {
+  return localStorage.getItem(key);
+};
+
+function setWithExpiry(key, value, ttl, update) {
+	const now = new Date()
+
+	// `item` is an object which contains the original value
+	// as well as the time when it's supposed to expire
+	const item = {
+		value: value,
+		expiry: now.getTime() + (ttl * 60 * 60 * 1000), //This is the number of hours till expiry
+		updated: update,
+	}
+	return localStorage.setItem(key, JSON.stringify(item))
+};
+
+function getWithExpiry(key) {
+	const itemStr = localStorage.getItem(key)
+	// if the item doesn't exist, return null
+	if (!itemStr) {
+		return null
+	}
+	const item = JSON.parse(itemStr)
+	const now = new Date()
+	// compare the expiry time of the item with the current time
+	if (now.getTime() > item.expiry) {
+		// If the item is expired, delete the item from storage
+		// and return null
+		localStorage.removeItem(key)
+		return null
+	}
+	return item.value
 }
 
-function getCookie(cname) {
-  var name = cname + "=";
-  var ca = document.cookie.split(';');
-  for(var i = 0; i < ca.length; i++) {
-    var c = ca[i];
-    while (c.charAt(0) == ' ') {
-      c = c.substring(1);
-    }
-    if (c.indexOf(name) == 0) {
-      return c.substring(name.length, c.length);
-    }
-  }
-  return "";
+function getWithExpiryUpdated(key) {
+	const itemStr = localStorage.getItem(key)
+	// if the item doesn't exist, return null
+	if (!itemStr) {
+		return null
+	}
+	const item = JSON.parse(itemStr)
+	
+	return item.updated
 }
 
-function checkCookie() {
-  var user = getCookie("username");
-  if (user != "") {
-    alert("Welcome again " + user);
-  } else {
-    user = prompt("Please enter your name:", "");
-    if (user != "" && user != null) {
-      setCookie("username", user, 365);
-    }
-  }
+async function clearServices(){
+	return localStorage.removeItem("services_android");
 }
+async function clearCc(){
+	return localStorage.removeItem("cc_android");
+}
+async function clearPeople(){
+	return localStorage.removeItem("people_android");
+}
+async function clearCal(){
+	return localStorage.removeItem("cal_android");
+}
+async function clearCheck(){
+	return localStorage.removeItem("check_android");
+}
+async function clearHead(){
+	return localStorage.removeItem("head_android");
+}
+async function clearMs(){
+	return localStorage.removeItem("ms_android");
+}
+async function refreshPage() {
+	location.reload(true);
+}
+async function chooseTab() {
+	openTab(event, 'apps');
+}
+
 
 /* THIS IS WHERE WE GET THE APPLE STORE VERSIONS  */
 
@@ -89,12 +133,11 @@ console.log("done with ios");
 
 // NOW WE ARE GOING TO RETURN EACH ANDROID APP, USING COOKIES WHERE POSSIBLE 
 
-
 // SERVICES
-if (getCookie("services-android") != '') {
-   const latitude = getCookie("services-android");
-   document.getElementById("services2").textContent = latitude;
-   console.log("Services From Cookie");
+if (getWithExpiry("services_android") != null) {
+	const version = getWithExpiry("services_android");
+	document.getElementById("services2").textContent = version;
+	console.log("Services from Local Storage");
 } else {
 	async function services_a() {
 		let s_a_api_url="https://api.appmonsta.com/v1/stores/android/details/com.ministrycentered.PlanningCenter.json?country=US";
@@ -111,19 +154,23 @@ if (getCookie("services-android") != '') {
 		} else { 
 			var sav_f = sav
 		};
+		var time = Date.now().toLocaleString();
+		var today  = new Date();
+		var options = { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric' };
+		document.getElementById("services2").textContent = sav_f;
+		setWithExpiry("services_android", sav_f, 6, today.toLocaleDateString("en-US", options));
 		console.log("Services from API");
-			document.getElementById("services2").textContent = sav_f;
-			setCookie("services-android", sav_f, 1);
 	}
-	services_a()
+	services_a();	
 }
 
 
+
 // CHUCH CENTER
-if (getCookie("cc-android") != '') {
-   const latitude = getCookie("cc-android");
-   document.getElementById("cc2").textContent = latitude;
-   console.log("Church Center From Cookie");
+if (getWithExpiry("cc_android") != null) {
+	const version = getWithExpiry("cc_android");
+	document.getElementById("cc2").textContent = version;
+	console.log("CC from Local Storage");
 } else {
 	async function cc_a() {
 		let s_a_api_url="https://api.appmonsta.com/v1/stores/android/details/com.ministrycentered.churchcenter.json?country=US";
@@ -140,19 +187,21 @@ if (getCookie("cc-android") != '') {
 		} else { 
 			var sav_f = sav
 		};
-			console.log("Church Center from API");
-			document.getElementById("cc2").textContent = sav_f;
-			setCookie("cc-android", sav_f, 1);
+		var time = Date.now();
+		document.getElementById("cc2").textContent = sav_f;
+		setWithExpiry("cc_android", sav_f, 6, time);
+		console.log("CC from API");
 	}
-	cc_a()
+	cc_a();	
 }
 
 
+
 // PEOPLE
-if (getCookie("people-android") != '') {
-   const latitude = getCookie("people-android");
-   document.getElementById("people2").textContent = latitude;
-   console.log("People From Cookie");
+if (getWithExpiry("people_android") != null) {
+	const version = getWithExpiry("people_android");
+	document.getElementById("people2").textContent = version;
+	console.log("People from Local Storage");
 } else {
 	async function people_a() {
 		let s_a_api_url="https://api.appmonsta.com/v1/stores/android/details/com.ministrycentered.people.json?country=US";
@@ -169,21 +218,23 @@ if (getCookie("people-android") != '') {
 		} else { 
 			var sav_f = sav
 		};
-			console.log("People from API");
-			document.getElementById("people2").textContent = sav_f;
-			setCookie("people-android", sav_f, 1);
+		var time = Date.now();
+		document.getElementById("people2").textContent = sav_f;
+		setWithExpiry("people_android", sav_f, 6, time);
+		console.log("People from API");
 	}
-	people_a()
+	people_a();	
 }
 
 
+
 // CALENDAR
-if (getCookie("cal-android") != '') {
-   const latitude = getCookie("cal-android");
-   document.getElementById("cal2").textContent = latitude;
-   console.log("Calendar From Cookie");
+if (getWithExpiry("cal_android") != null) {
+	const version = getWithExpiry("cal_android");
+	document.getElementById("cal2").textContent = version;
+	console.log("Calendar from Local Storage");
 } else {
-	async function cal_a() {
+	async function calendar_a() {
 		let s_a_api_url="https://api.appmonsta.com/v1/stores/android/details/com.ministrycentered.resources.json?country=US";
 		let username = "ce32a0f2338142c3f09f7d57b08d75ea1bc53f93"
 		let password = "x"
@@ -198,19 +249,20 @@ if (getCookie("cal-android") != '') {
 		} else { 
 			var sav_f = sav
 		};
-			console.log("Calendar from API");
-			document.getElementById("cal2").textContent = sav_f;
-			setCookie("cal-android", sav_f, 1);
+		var time = Date.now();
+		document.getElementById("cal2").textContent = sav_f;
+		setWithExpiry("cal_android", sav_f, 6, time);
+		console.log("Calendar from API");
 	}
-	cal_a()
+	calendar_a();	
 }
 
 
 // CHECK INS
-if (getCookie("check-android") != '') {
-   const latitude = getCookie("check-android");
-   document.getElementById("check2").textContent = latitude;
-   console.log("Checkins From Cookie")
+if (getWithExpiry("check_android") != null) {
+	const version = getWithExpiry("check_android");
+	document.getElementById("check2").textContent = version;
+	console.log("Checkins from Local Storage");
 } else {
 	async function check_a() {
 		let s_a_api_url="https://api.appmonsta.com/v1/stores/android/details/com.ministrycentered.checkins.json?country=US";
@@ -227,21 +279,22 @@ if (getCookie("check-android") != '') {
 		} else { 
 			var sav_f = sav
 		};
-			console.log("Checkins from API");
-			document.getElementById("check2").textContent = sav_f;
-			setCookie("check-android", sav_f, 1);
+		var time = Date.now();
+		document.getElementById("check2").textContent = sav_f;
+		setWithExpiry("check_android", sav_f, 6, time);
+		console.log("Checkins from API");
 	}
-	check_a()
+	check_a();	
 }
 
 
 // HEADCOUNTS
-if (getCookie("headcounts-android") != '') {
-   const latitude = getCookie("headcounts-android");
-   document.getElementById("head2").textContent = latitude;
-   console.log("Headcounts From Cookie")
+if (getWithExpiry("head_android") != null) {
+	const version = getWithExpiry("head_android");
+	document.getElementById("head2").textContent = version;
+	console.log("Headcounts from Local Storage");
 } else {
-	async function headcounts_a() {
+	async function head_a() {
 		let s_a_api_url="https://api.appmonsta.com/v1/stores/android/details/com.ministrycentered.headcounts.json?country=US";
 		let username = "5d569e6984b43c340e8604228e98c8522e566507"
 		let password = "x"
@@ -256,19 +309,20 @@ if (getCookie("headcounts-android") != '') {
 		} else { 
 			var sav_f = sav
 		};
-			console.log("Headcounts from API");
-			document.getElementById("head2").textContent = sav_f;
-			setCookie("headcounts-android", sav_f, 1);
+		var time = Date.now();
+		document.getElementById("head2").textContent = sav_f;
+		setWithExpiry("head_android", sav_f, 6, time);
+		console.log("Headcounts from API");
 	}
-	headcounts_a()
+	head_a();	
 }
 
 
 // MUSIC STAND
-if (getCookie("ms-android") != '') {
-   const latitude = getCookie("ms-android");
-   document.getElementById("ms2").textContent = latitude;
-   console.log("Music Stand From Cookie")
+if (getWithExpiry("ms_android") != null) {
+	const version = getWithExpiry("ms_android");
+	document.getElementById("ms2").textContent = version;
+	console.log("Music Stand from Local Storage");
 } else {
 	async function ms_a() {
 		let s_a_api_url="https://api.appmonsta.com/v1/stores/android/details/com.ministrycentered.musicstand.json?country=US";
@@ -285,9 +339,191 @@ if (getCookie("ms-android") != '') {
 		} else { 
 			var sav_f = sav
 		};
-			console.log("Music Stand from API");
-			document.getElementById("ms2").textContent = sav_f;
-			setCookie("ms-android", sav_f, 1);
+		var time = Date.now();
+		document.getElementById("ms2").textContent = sav_f;
+		setWithExpiry("ms_android", sav_f, 6, time);
+		console.log("Music Stand from API");
 	}
-	ms_a()
+	ms_a();	
+}
+
+if (getWithExpiryUpdated("services_android") != null) {
+		async function updateda() {
+			var upd = getWithExpiryUpdated("services_android");
+			document.getElementById("updatedat").textContent = upd;
+			console.log(upd);
+		}
+	updateda();
+} else {
+	document.getElementById("updatedat").textContent = "Now";
+}
+
+
+//Functions to refresh local storage from API on request
+
+async function services_refresh() {
+		let s_a_api_url="https://api.appmonsta.com/v1/stores/android/details/com.ministrycentered.PlanningCenter.json?country=US";
+		let username = "5bfe013167c034b97875e2c4d1b5d5ff6d4946a5"
+		let password = "x"
+		let authString = `${username}:${password}`
+		let headers = new Headers();
+		headers.set('Authorization', 'Basic ' + btoa(authString))
+		const req = await fetch(s_a_api_url,{method: 'GET', headers: headers});
+		const res = await req.json();
+		const sav = res.version;
+		if (sav.includes('Varies')) { 
+			var sav_f = "Varies"
+		} else { 
+			var sav_f = sav
+		};
+		var time = Date.now().toLocaleString();
+		var today  = new Date();
+		var options = { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric' };
+		document.getElementById("services2").textContent = sav_f;
+		setWithExpiry("services_android", sav_f, 6, today.toLocaleDateString("en-US", options));
+		console.log("Services from API");
+	}
+
+async function cc_refresh() {
+		let s_a_api_url="https://api.appmonsta.com/v1/stores/android/details/com.ministrycentered.churchcenter.json?country=US";
+		let username = "ef27fcaf1dc326463e193367c6722672a23aaa1d"
+		let password = "x"
+		let authString = `${username}:${password}`
+		let headers = new Headers();
+		headers.set('Authorization', 'Basic ' + btoa(authString))
+		const req = await fetch(s_a_api_url,{method: 'GET', headers: headers});
+		const res = await req.json();
+		const sav = res.version;
+		if (sav.includes('Varies')) { 
+			var sav_f = "Varies"
+		} else { 
+			var sav_f = sav
+		};
+		var time = Date.now();
+		document.getElementById("cc2").textContent = sav_f;
+		setWithExpiry("cc_android", sav_f, 6, time);
+		console.log("CC from API");
+	}
+
+async function people_refresh() {
+		let s_a_api_url="https://api.appmonsta.com/v1/stores/android/details/com.ministrycentered.people.json?country=US";
+		let username = "7c54b11fafa2e3dc7acbf565c36d6606d3b58bc3"
+		let password = "x"
+		let authString = `${username}:${password}`
+		let headers = new Headers();
+		headers.set('Authorization', 'Basic ' + btoa(authString))
+		const req = await fetch(s_a_api_url,{method: 'GET', headers: headers});
+		const res = await req.json();
+		const sav = res.version;
+		if (sav.includes('Varies')) { 
+			var sav_f = "Varies"
+		} else { 
+			var sav_f = sav
+		};
+		var time = Date.now();
+		document.getElementById("people2").textContent = sav_f;
+		setWithExpiry("people_android", sav_f, 6, time);
+		console.log("People from API");
+	}
+
+async function calendar_refresh() {
+		let s_a_api_url="https://api.appmonsta.com/v1/stores/android/details/com.ministrycentered.resources.json?country=US";
+		let username = "ce32a0f2338142c3f09f7d57b08d75ea1bc53f93"
+		let password = "x"
+		let authString = `${username}:${password}`
+		let headers = new Headers();
+		headers.set('Authorization', 'Basic ' + btoa(authString))
+		const req = await fetch(s_a_api_url,{method: 'GET', headers: headers});
+		const res = await req.json();
+		const sav = res.version;
+		if (sav.includes('Varies')) { 
+			var sav_f = "Varies"
+		} else { 
+			var sav_f = sav
+		};
+		var time = Date.now();
+		document.getElementById("cal2").textContent = sav_f;
+		setWithExpiry("cal_android", sav_f, 6, time);
+		console.log("Calendar from API");
+	}
+
+async function check_refresh() {
+		let s_a_api_url="https://api.appmonsta.com/v1/stores/android/details/com.ministrycentered.checkins.json?country=US";
+		let username = "d49e3d497c17d0db8bd2c4bfb11b14ad40c39b5b"
+		let password = "x"
+		let authString = `${username}:${password}`
+		let headers = new Headers();
+		headers.set('Authorization', 'Basic ' + btoa(authString))
+		const req = await fetch(s_a_api_url,{method: 'GET', headers: headers});
+		const res = await req.json();
+		const sav = res.version;
+		if (sav.includes('Varies')) { 
+			var sav_f = "Varies"
+		} else { 
+			var sav_f = sav
+		};
+		var time = Date.now();
+		document.getElementById("check2").textContent = sav_f;
+		setWithExpiry("check_android", sav_f, 6, time);
+		console.log("Checkins from API");
+	}
+
+async function head_refresh() {
+		let s_a_api_url="https://api.appmonsta.com/v1/stores/android/details/com.ministrycentered.headcounts.json?country=US";
+		let username = "5d569e6984b43c340e8604228e98c8522e566507"
+		let password = "x"
+		let authString = `${username}:${password}`
+		let headers = new Headers();
+		headers.set('Authorization', 'Basic ' + btoa(authString))
+		const req = await fetch(s_a_api_url,{method: 'GET', headers: headers});
+		const res = await req.json();
+		const sav = res.version;
+		if (sav.includes('Varies')) { 
+			var sav_f = "Varies"
+		} else { 
+			var sav_f = sav
+		};
+		var time = Date.now();
+		document.getElementById("head2").textContent = sav_f;
+		setWithExpiry("head_android", sav_f, 6, time);
+		console.log("Headcounts from API");
+	}
+
+async function ms_refresh() {
+		let s_a_api_url="https://api.appmonsta.com/v1/stores/android/details/com.ministrycentered.musicstand.json?country=US";
+		let username = "1bd7f31dc71433afdef628b21cafd13aa1d1cb98"
+		let password = "x"
+		let authString = `${username}:${password}`
+		let headers = new Headers();
+		headers.set('Authorization', 'Basic ' + btoa(authString))
+		const req = await fetch(s_a_api_url,{method: 'GET', headers: headers});
+		const res = await req.json();
+		const sav = res.version;
+		if (sav.includes('Varies')) { 
+			var sav_f = "Varies"
+		} else { 
+			var sav_f = sav
+		};
+		var time = Date.now();
+		document.getElementById("ms2").textContent = sav_f;
+		setWithExpiry("ms_android", sav_f, 6, time);
+		console.log("Music Stand from API");
+	}
+
+function clearLocalStorage() {
+	clearServices();
+	clearCc();
+	clearPeople();
+	clearCal();
+	clearCheck();
+	clearHead();
+	clearMs();
+	services_refresh();
+	cc_refresh();
+	people_refresh();
+	calendar_refresh();
+	check_refresh();
+	head_refresh();
+	ms_refresh();
+	document.getElementById("updatedat").textContent = "Now";
 }
