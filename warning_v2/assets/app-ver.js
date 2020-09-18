@@ -128,16 +128,12 @@ headcounts()
 music()
 
 
-console.log("done with ios");
-
-
 // NOW WE ARE GOING TO RETURN EACH ANDROID APP, USING COOKIES WHERE POSSIBLE 
 
 // SERVICES
 if (getWithExpiry("services_android") != null) {
 	const version = getWithExpiry("services_android");
 	document.getElementById("services2").textContent = version;
-	console.log("Services from Local Storage");
 } else {
 	async function services_a() {
 		let s_a_api_url="https://api.appmonsta.com/v1/stores/android/details/com.ministrycentered.PlanningCenter.json?country=US";
@@ -159,7 +155,6 @@ if (getWithExpiry("services_android") != null) {
 		var options = { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric' };
 		document.getElementById("services2").textContent = sav_f;
 		setWithExpiry("services_android", sav_f, 6, today.toLocaleDateString("en-US", options));
-		console.log("Services from API");
 	}
 	services_a();	
 }
@@ -170,7 +165,6 @@ if (getWithExpiry("services_android") != null) {
 if (getWithExpiry("cc_android") != null) {
 	const version = getWithExpiry("cc_android");
 	document.getElementById("cc2").textContent = version;
-	console.log("CC from Local Storage");
 } else {
 	async function cc_a() {
 		let s_a_api_url="https://api.appmonsta.com/v1/stores/android/details/com.ministrycentered.churchcenter.json?country=US";
@@ -190,7 +184,6 @@ if (getWithExpiry("cc_android") != null) {
 		var time = Date.now();
 		document.getElementById("cc2").textContent = sav_f;
 		setWithExpiry("cc_android", sav_f, 6, time);
-		console.log("CC from API");
 	}
 	cc_a();	
 }
@@ -201,7 +194,6 @@ if (getWithExpiry("cc_android") != null) {
 if (getWithExpiry("people_android") != null) {
 	const version = getWithExpiry("people_android");
 	document.getElementById("people2").textContent = version;
-	console.log("People from Local Storage");
 } else {
 	async function people_a() {
 		let s_a_api_url="https://api.appmonsta.com/v1/stores/android/details/com.ministrycentered.people.json?country=US";
@@ -221,7 +213,6 @@ if (getWithExpiry("people_android") != null) {
 		var time = Date.now();
 		document.getElementById("people2").textContent = sav_f;
 		setWithExpiry("people_android", sav_f, 6, time);
-		console.log("People from API");
 	}
 	people_a();	
 }
@@ -232,7 +223,6 @@ if (getWithExpiry("people_android") != null) {
 if (getWithExpiry("cal_android") != null) {
 	const version = getWithExpiry("cal_android");
 	document.getElementById("cal2").textContent = version;
-	console.log("Calendar from Local Storage");
 } else {
 	async function calendar_a() {
 		let s_a_api_url="https://api.appmonsta.com/v1/stores/android/details/com.ministrycentered.resources.json?country=US";
@@ -252,7 +242,6 @@ if (getWithExpiry("cal_android") != null) {
 		var time = Date.now();
 		document.getElementById("cal2").textContent = sav_f;
 		setWithExpiry("cal_android", sav_f, 6, time);
-		console.log("Calendar from API");
 	}
 	calendar_a();	
 }
@@ -262,7 +251,6 @@ if (getWithExpiry("cal_android") != null) {
 if (getWithExpiry("check_android") != null) {
 	const version = getWithExpiry("check_android");
 	document.getElementById("check2").textContent = version;
-	console.log("Checkins from Local Storage");
 } else {
 	async function check_a() {
 		let s_a_api_url="https://api.appmonsta.com/v1/stores/android/details/com.ministrycentered.checkins.json?country=US";
@@ -282,7 +270,6 @@ if (getWithExpiry("check_android") != null) {
 		var time = Date.now();
 		document.getElementById("check2").textContent = sav_f;
 		setWithExpiry("check_android", sav_f, 6, time);
-		console.log("Checkins from API");
 	}
 	check_a();	
 }
@@ -292,7 +279,6 @@ if (getWithExpiry("check_android") != null) {
 if (getWithExpiry("head_android") != null) {
 	const version = getWithExpiry("head_android");
 	document.getElementById("head2").textContent = version;
-	console.log("Headcounts from Local Storage");
 } else {
 	async function head_a() {
 		let s_a_api_url="https://api.appmonsta.com/v1/stores/android/details/com.ministrycentered.headcounts.json?country=US";
@@ -312,7 +298,6 @@ if (getWithExpiry("head_android") != null) {
 		var time = Date.now();
 		document.getElementById("head2").textContent = sav_f;
 		setWithExpiry("head_android", sav_f, 6, time);
-		console.log("Headcounts from API");
 	}
 	head_a();	
 }
@@ -322,7 +307,6 @@ if (getWithExpiry("head_android") != null) {
 if (getWithExpiry("ms_android") != null) {
 	const version = getWithExpiry("ms_android");
 	document.getElementById("ms2").textContent = version;
-	console.log("Music Stand from Local Storage");
 } else {
 	async function ms_a() {
 		let s_a_api_url="https://api.appmonsta.com/v1/stores/android/details/com.ministrycentered.musicstand.json?country=US";
@@ -342,7 +326,6 @@ if (getWithExpiry("ms_android") != null) {
 		var time = Date.now();
 		document.getElementById("ms2").textContent = sav_f;
 		setWithExpiry("ms_android", sav_f, 6, time);
-		console.log("Music Stand from API");
 	}
 	ms_a();	
 }
@@ -351,7 +334,6 @@ if (getWithExpiryUpdated("services_android") != null) {
 		async function updateda() {
 			var upd = getWithExpiryUpdated("services_android");
 			document.getElementById("updatedat").textContent = upd;
-			console.log(upd);
 		}
 	updateda();
 } else {
@@ -381,7 +363,6 @@ async function services_refresh() {
 		var options = { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric' };
 		document.getElementById("services2").textContent = sav_f;
 		setWithExpiry("services_android", sav_f, 6, today.toLocaleDateString("en-US", options));
-		console.log("Services from API");
 	}
 
 async function cc_refresh() {
@@ -402,7 +383,6 @@ async function cc_refresh() {
 		var time = Date.now();
 		document.getElementById("cc2").textContent = sav_f;
 		setWithExpiry("cc_android", sav_f, 6, time);
-		console.log("CC from API");
 	}
 
 async function people_refresh() {
@@ -423,7 +403,6 @@ async function people_refresh() {
 		var time = Date.now();
 		document.getElementById("people2").textContent = sav_f;
 		setWithExpiry("people_android", sav_f, 6, time);
-		console.log("People from API");
 	}
 
 async function calendar_refresh() {
@@ -444,7 +423,6 @@ async function calendar_refresh() {
 		var time = Date.now();
 		document.getElementById("cal2").textContent = sav_f;
 		setWithExpiry("cal_android", sav_f, 6, time);
-		console.log("Calendar from API");
 	}
 
 async function check_refresh() {
@@ -465,7 +443,6 @@ async function check_refresh() {
 		var time = Date.now();
 		document.getElementById("check2").textContent = sav_f;
 		setWithExpiry("check_android", sav_f, 6, time);
-		console.log("Checkins from API");
 	}
 
 async function head_refresh() {
@@ -486,7 +463,6 @@ async function head_refresh() {
 		var time = Date.now();
 		document.getElementById("head2").textContent = sav_f;
 		setWithExpiry("head_android", sav_f, 6, time);
-		console.log("Headcounts from API");
 	}
 
 async function ms_refresh() {
@@ -507,7 +483,6 @@ async function ms_refresh() {
 		var time = Date.now();
 		document.getElementById("ms2").textContent = sav_f;
 		setWithExpiry("ms_android", sav_f, 6, time);
-		console.log("Music Stand from API");
 	}
 
 function clearLocalStorage() {
