@@ -21,7 +21,7 @@ $(function() {
   
   client.invoke('resize', {
     width: '100%',
-    height: '325px'
+    height: '800px'
   })
 
   client.get('ticket').then((data) => {
@@ -29,7 +29,7 @@ $(function() {
   }, showError)
 });
 
-function showInfo(ticket) {  
+async function showInfo(ticket) {  
   // Find and display user data
   var requester_data = {
     'name': ticket.requester.name,
@@ -47,13 +47,33 @@ function showInfo(ticket) {
   var notesHtml = notesTemplate(requester_data);
   $("#notes-content").html(notesHtml);
 
-  findNewAndOpenTickets(requester_data.email);
+  // Find Warnings to Display
+  let hasRecentOpenOrNewTickets = await findNewAndOpenTicketCount(requester_data.email) > 1 ? true : false
 
-  // Find and display ticket data
+  if(ticket.tags.join().match(/unicorn|vip|power_user|requested_feature|beta|pcu|myplanningcenter|to_be_triaged|customer_attachment|canada/g) || requester_data.notes != null || hasRecentOpenOrNewTickets) { 
+    let warning_data = {
+      'otherRecentTickets': hasRecentOpenOrNewTickets,
+      'unicorn': ticket.tags.includes('unicorn'),
+      'vip': ticket.tags.includes('vip'),
+      'power_user': ticket.tags.includes('power_user'),
+      'requested_feature': ticket.tags.includes('requested_feature'),
+      'beta': ticket.tags.includes('beta'),
+      'pcu': ticket.tags.includes('pcu'),
+      'myplanningcenter': ticket.tags.includes('myplanningcenter'),
+      'triage': ticket.tags.includes('to_be_triaged'),
+      'attachment': ticket.tags.includes('customer_attachment'),
+      'canada': ticket.tags.includes('canada'),
+    }
 
-  var noWarning = true
-  if(ticket.tags.join().match(/unicorn|vip|power_user|requested_feature|beta|pcu|myplanningcenter|to_be_triaged|customer_attachment/g) || requester_data.notes != null) { 
-    noWarning = false
+    // Show warnings
+    var openTicketsSource = $("#warnings").html();
+    var openTicketsTemplate = Handlebars.compile(openTicketsSource);
+    var openTicketsHtml = openTicketsTemplate(warning_data);
+    $("#alerts-content").html(openTicketsHtml);
+
+    $('#display-warnings').click(function() {
+      $('#warnings-content').toggle()
+    })
   }
 
   var noTrial = true
@@ -65,16 +85,6 @@ function showInfo(ticket) {
     'id': ticket.id,
     'tags': ticket.tags,
     'created_at': formatDate(ticket.created_at),
-    'unicorn': ticket.tags.includes('unicorn'),
-    'vip': ticket.tags.includes('vip'),
-    'power_user': ticket.tags.includes('power_user'),
-    'requested_feature': ticket.tags.includes('requested_feature'),
-    'beta': ticket.tags.includes('beta'),
-    'pcu': ticket.tags.includes('pcu'),
-    'myplanningcenter': ticket.tags.includes('myplanningcenter'),
-    'triage': ticket.tags.includes('to_be_triaged'),
-    'attachment': ticket.tags.includes('customer_attachment'),
-    'noWarning': noWarning,
     'CalendarTrial': ticket.tags.includes('resources_trial') || ticket.tags.includes('calendar_trial'),
     'Check-InsTrial': ticket.tags.includes('check_ins_trial'),
     'GivingTrial': ticket.tags.includes('giving_trial'),
@@ -82,7 +92,6 @@ function showInfo(ticket) {
     'RegistrationsTrial': ticket.tags.includes('registrations_trial'),
     'ServicesTrial': ticket.tags.includes('services_trial'),
     'noTrial': noTrial,
-    'canada': ticket.tags.includes('canada'),
   };
 
   var source = $("#ticket-template").html();
@@ -113,7 +122,7 @@ function formatDate(date) {
   return date;
 }
 
-function findNewAndOpenTickets(email) {
+function findNewAndOpenTicketCount(email) {
   var d = new Date();
   var twoDaysAgo = new Date(d.setDate(d.getDate() - 2));
   var searchDate =  `${twoDaysAgo.getFullYear()}-${("0" + (twoDaysAgo.getMonth() + 1)).slice(-2)}-${("0" + twoDaysAgo.getDate()).slice(-2)}`;
@@ -123,16 +132,7 @@ function findNewAndOpenTickets(email) {
     dataType: 'json',
   }
 
-  client.request(settings).then(function(data) {
-    updateTicketInfo(data)
+  return client.request(settings).then(function(data) {
+    return data.count
   }, showError);
-}
-
-function updateTicketInfo(tickets) {
-  if(tickets.count > 1){
-    var openTicketsSource = $("#open-tickets").html();
-    var openTicketsTemplate = Handlebars.compile(openTicketsSource);
-    var openTicketsHtml = openTicketsTemplate({'numberOfOpenTickets': tickets.count});
-    $("#open-ticket-content").html(openTicketsHtml);
-  }
 }

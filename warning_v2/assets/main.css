@@ -1,24 +1,24 @@
 .header {
   display: flex;
   align-items: center;
- 	padding: 0.5em;
- 	border-bottom: solid 1px #c9c9c9;
- 	justify-content: center;
+  padding: 0.5em;
+  border-bottom: solid 1px #c9c9c9;
+  justify-content: center;
 }
 
 .name {
-	font-size: 20;
-	width: 100%;
+  font-size: 20;
+  width: 100%;
   text-align: center;
   padding-right: 0px;
-  text-indent:0px;
-  text-overflow:ellipsis;
-	overflow:hidden;
-	white-space:nowrap;
+  text-indent: 0px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
 }
 
 .icon_container {
-	display: flex;
+  display: flex;
   margin: 0px 5px;
 }
 
@@ -27,74 +27,73 @@
 }
 
 .person_notes {
-	width: 80%;
-	font-size: 12;
-	text-align: center;
-	background: #F5F5F5;
-	display: inline-block;
-	padding: 5px;
-	border-radius: 10px;
-	margin-top: 8px;
+  width: 80%;
+  font-size: 12;
+  text-align: center;
+  background: #f5f5f5;
+  display: inline-block;
+  padding: 5px;
+  border-radius: 10px;
+  margin-top: 8px;
 }
 
 .title {
-	width: 100%;
-	font-size: 18;
-	text-align: center;
-	padding-top: 8px;
+  width: 100%;
+  font-size: 18;
+  text-align: center;
+  padding-top: 8px;
 }
 
 .namediv {
-	width: 100%;
+  width: 100%;
 }
 
 .flexbox {
-	max-width: 100%;
-	display: flex;
-	justify-content: center;
-	align-items: center;
+  max-width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-
 .blank {
-	width: 30px;
+  width: 30px;
 }
 
 .pico {
-	max-width: 150px;
-	padding-top: 8px;
+  max-width: 150px;
+  padding-top: 8px;
 }
 
 .trials {
-	text-align: center;
-	padding-top: 8px;
-	font-size: 20;
+  text-align: center;
+  padding-top: 8px;
+  font-size: 20;
 }
 
 .trial_icon {
-	max-width: 30px;
-	padding: 3px 3px 0px 3px;
+  max-width: 30px;
+  padding: 3px 3px 0px 3px;
 }
 
 .tab-content {
-	display: none;
+  display: none;
 }
 
-.container { 
- 	width: 100%; 
- 	display: inline-block; 
- 	vertical-align: top; 
+.container {
+  width: 100%;
+  display: inline-block;
+  vertical-align: top;
 }
-.app { 
-  vertical-align: top; 
-  width: 24%; 
-  display: inline-block; 
-  text-align: center; 
+.app {
+  vertical-align: top;
+  width: 24%;
+  display: inline-block;
+  text-align: center;
   padding-bottom: 10px;
 }
 
 .nav-bar {
-	width: 100%;
+  width: 100%;
   display: block;
   overflow: hidden;
   background-color: #fff;
@@ -121,8 +120,8 @@
   background-color: #efefef;
 }
 
-#recent-tickets-alert {
-	margin-top: 10px;
-	margin-bottom: 0px;
-	text-align: center;
+.warning {
+  margin-top: 10px;
+  margin-bottom: 0px;
+  text-align: center;
 }
