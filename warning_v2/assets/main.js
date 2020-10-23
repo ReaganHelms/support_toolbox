@@ -52,7 +52,7 @@ function showInfo(ticket) {
   // Find and display ticket data
 
   var noWarning = true
-  if(ticket.tags.join().match(/unicorn|vip|power_user|requested_feature|beta|pcu|myplanningcenter|to_be_triaged|customer_attachment/g) || notes != null) { 
+  if(ticket.tags.join().match(/unicorn|vip|power_user|requested_feature|beta|pcu|myplanningcenter|to_be_triaged|customer_attachment/g) || requester_data.notes != null) { 
     noWarning = false
   }
 
