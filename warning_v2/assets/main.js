@@ -18,36 +18,99 @@ var client = null
 
 $(function() {
   client = ZAFClient.init();
+  
   client.invoke('resize', {
     width: '100%',
     height: '325px'
   })
-  client.get('ticket.requester.id').then(
-    function(data) {
-      var user_id = data['ticket.requester.id'];
-      requestUserInfo(user_id);
-    }
-  );
+
+  client.get('ticket').then((data) => {
+    showInfo(data.ticket)
+  }, showError)
 });
 
-function requestUserInfo(id) {
-  var settings = {
-    url: '/api/v2/users/' + id + '.json',
-    type:'GET',
-    dataType: 'json',
+function showInfo(ticket) {  
+  // Find and display user data
+  var requester_data = {
+    'name': ticket.requester.name,
+    'email': ticket.requester.email,
+    'notes': ticket.requester.notes,    
   };
 
-  client.request(settings).then(function(data) { showInfo(data) }, showError);
+  var source = $("#requester-template").html();  
+  var template = Handlebars.compile(source);
+  var html = template(requester_data);
+  $("#requester-content").html(html);
+
+  var notesSource = $("#notes-template").html();
+  var notesTemplate = Handlebars.compile(notesSource);
+  var notesHtml = notesTemplate(requester_data);
+  $("#notes-content").html(notesHtml);
+
+  findNewAndOpenTickets(requester_data.email);
+
+  // Find and display ticket data
+
+  var noWarning = true
+  if(ticket.tags.join().match(/unicorn|vip|power_user|requested_feature|beta|pcu|myplanningcenter|to_be_triaged|customer_attachment/g) || notes != null) { 
+    noWarning = false
+  }
+
+  var noTrial = true
+  if(ticket.tags.join().match(/check_ins_trial|giving_trial|groups_trial|registrations_trial|calendar_trial|resources_trial|services_trial/g)) { 
+    noTrial = false
+  }
+
+  var ticket_data = {
+    'id': ticket.id,
+    'tags': ticket.tags,
+    'created_at': formatDate(ticket.created_at),
+    'unicorn': ticket.tags.includes('unicorn'),
+    'vip': ticket.tags.includes('vip'),
+    'power_user': ticket.tags.includes('power_user'),
+    'requested_feature': ticket.tags.includes('requested_feature'),
+    'beta': ticket.tags.includes('beta'),
+    'pcu': ticket.tags.includes('pcu'),
+    'myplanningcenter': ticket.tags.includes('myplanningcenter'),
+    'triage': ticket.tags.includes('to_be_triaged'),
+    'attachment': ticket.tags.includes('customer_attachment'),
+    'noWarning': noWarning,
+    'CalendarTrial': ticket.tags.includes('resources_trial') || ticket.tags.includes('calendar_trial'),
+    'Check-InsTrial': ticket.tags.includes('check_ins_trial'),
+    'GivingTrial': ticket.tags.includes('giving_trial'),
+    'GroupsTrial': ticket.tags.includes('groups_trial'),
+    'RegistrationsTrial': ticket.tags.includes('registrations_trial'),
+    'ServicesTrial': ticket.tags.includes('services_trial'),
+    'noTrial': noTrial,
+    'canada': ticket.tags.includes('canada'),
+  };
+
+  var source = $("#ticket-template").html();
+  var template = Handlebars.compile(source);
+  var html = template(ticket_data);
+  $("#ticket-content").html(html);
 }
 
-function requestTicketInfo(id, notes) {
-  var settings = {
-    url: '/api/v2/tickets/' + id + '.json',
-    type:'GET',
-    dataType: 'json',
+function showError(response) {
+  var error_data = {
+    'status': response.status,
+    'statusText': response.statusText
   };
+  var source = $("#error-template").html();
+  var template = Handlebars.compile(source);
+  var html = template(error_data);
+  $("#ticket-content").html(html);
+}
 
-  client.request(settings).then(function(data) { showTicketInfo(data, notes) }, showError);
+function formatDate(date) {
+  var cdate = new Date(date);
+  var options = {
+    year: "numeric",
+    month: "short",
+    day: "numeric"
+  };
+  date = cdate.toLocaleDateString("en-us", options);
+  return date;
 }
 
 function findNewAndOpenTickets(email) {
@@ -63,104 +126,6 @@ function findNewAndOpenTickets(email) {
   client.request(settings).then(function(data) {
     updateTicketInfo(data)
   }, showError);
-}
-
-function showInfo(data) {
-
-  var requester_data = {
-    'name': data.user.name,
-    'tags': data.user.tags,
-    'email': data.user.email,
-    'created_at': formatDate(data.user.created_at),
-    'last_login_at': formatDate(data.user.last_login_at),
-    'notes': data.user.notes,
-    
-  };
-
-  var source = $("#requester-template").html();  
-  var template = Handlebars.compile(source);
-  var html = template(requester_data);
-  $("#requester-content").html(html);
-
-  var notesSource = $("#notes-template").html();
-  var notesTemplate = Handlebars.compile(notesSource);
-  var notesHtml = notesTemplate(requester_data);
-  $("#notes-content").html(notesHtml);
-
-  findNewAndOpenTickets(data.user.email);
-
-  client.get('ticket.id').then(
-    function(data) {
-      var ticket_id = data['ticket.id'];
-      requestTicketInfo(ticket_id, requester_data.notes);
-    }
-  );
-}
-
-function showError(response) {
-  var error_data = {
-    'status': response.status,
-    'statusText': response.statusText
-  };
-  var source = $("#error-template").html();
-  var template = Handlebars.compile(source);
-  var html = template(error_data);
-  $("#ticket-content").html(html);
-}
-
-
-function showTicketInfo(data, notes) {
-  var noWarning = true;
-
-  if(data.ticket.tags.join().match(/unicorn|vip|power_user|requested_feature|beta|pcu|myplanningcenter|to_be_triaged|customer_attachment/g) || notes != null) { 
-    noWarning = false;
-  }
-
-   var noTrial = true;
-
-  if(data.ticket.tags.join().match(/check_ins_trial|giving_trial|groups_trial|registrations_trial|calendar_trial|resources_trial|services_trial/g)) { 
-    noTrial = false;
-  }
-
-  var ticket_data = {
-    'id': data.ticket.id,
-    'tags': data.ticket.tags,
-    'created_at': formatDate(data.ticket.created_at),
-    'unicorn': data.ticket.tags.includes('unicorn'),
-    'vip': data.ticket.tags.includes('vip'),
-    'power_user': data.ticket.tags.includes('power_user'),
-    'requested_feature': data.ticket.tags.includes('requested_feature'),
-    'beta': data.ticket.tags.includes('beta'),
-    'pcu': data.ticket.tags.includes('pcu'),
-    'myplanningcenter': data.ticket.tags.includes('myplanningcenter'),
-    'triage': data.ticket.tags.includes('to_be_triaged'),
-    'attachment': data.ticket.tags.includes('customer_attachment'),
-    'noWarning': noWarning,
-    'CalendarTrial': data.ticket.tags.includes('resources_trial') || data.ticket.tags.includes('calendar_trial'),
-    'Check-InsTrial': data.ticket.tags.includes('check_ins_trial'),
-    'GivingTrial': data.ticket.tags.includes('giving_trial'),
-    'GroupsTrial': data.ticket.tags.includes('groups_trial'),
-    'RegistrationsTrial': data.ticket.tags.includes('registrations_trial'),
-    'ServicesTrial': data.ticket.tags.includes('services_trial'),
-    'noTrial': noTrial,
-    'canada': data.ticket.tags.includes('canada'),
-  };
-
-  var source = $("#ticket-template").html();
-  var template = Handlebars.compile(source);
-  var html = template(ticket_data);
-  $("#ticket-content").html(html);
-}
-
-function formatDate(date) {
-  var cdate = new Date(date);
-  var options = {
-    year: "numeric",
-    month: "short",
-    day: "numeric"
-  };
-  date = cdate.toLocaleDateString("en-us", options);
-  return date;
 }
 
 function updateTicketInfo(tickets) {
