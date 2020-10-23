@@ -14,31 +14,33 @@ function openTab(evt, tabName) {
   evt.currentTarget.className += " w3-red";
 }
 
+var client = null
 
 $(function() {
-  var client = ZAFClient.init();
-  client.invoke('resize', { width: '100%', height: '325px' });
-  
+  client = ZAFClient.init();
+  client.invoke('resize', {
+    width: '100%',
+    height: '325px'
+  })
   client.get('ticket.requester.id').then(
     function(data) {
       var user_id = data['ticket.requester.id'];
-      requestUserInfo(client, user_id);
+      requestUserInfo(user_id);
     }
   );
 });
 
-
-function requestUserInfo(client, id) {
+function requestUserInfo(id) {
   var settings = {
     url: '/api/v2/users/' + id + '.json',
     type:'GET',
     dataType: 'json',
   };
 
-  client.request(settings).then(function(data) { showInfo(client, data) }, showError);
+  client.request(settings).then(function(data) { showInfo(data) }, showError);
 }
 
-function requestTicketInfo(client, id, notes) {
+function requestTicketInfo(id, notes) {
   var settings = {
     url: '/api/v2/tickets/' + id + '.json',
     type:'GET',
@@ -48,7 +50,7 @@ function requestTicketInfo(client, id, notes) {
   client.request(settings).then(function(data) { showTicketInfo(data, notes) }, showError);
 }
 
-function findNewAndOpenTickets(client, email) {
+function findNewAndOpenTickets(email) {
   var d = new Date();
   var twoDaysAgo = new Date(d.setDate(d.getDate() - 2));
   var searchDate =  `${twoDaysAgo.getFullYear()}-${("0" + (twoDaysAgo.getMonth() + 1)).slice(-2)}-${("0" + twoDaysAgo.getDate()).slice(-2)}`;
@@ -63,7 +65,7 @@ function findNewAndOpenTickets(client, email) {
   }, showError);
 }
 
-function showInfo(client, data) {
+function showInfo(data) {
 
   var requester_data = {
     'name': data.user.name,
@@ -85,12 +87,12 @@ function showInfo(client, data) {
   var notesHtml = notesTemplate(requester_data);
   $("#notes-content").html(notesHtml);
 
-  findNewAndOpenTickets(client, data.user.email);
+  findNewAndOpenTickets(data.user.email);
 
   client.get('ticket.id').then(
     function(data) {
       var ticket_id = data['ticket.id'];
-      requestTicketInfo(client, ticket_id, requester_data.notes);
+      requestTicketInfo(ticket_id, requester_data.notes);
     }
   );
 }
@@ -143,9 +145,6 @@ function showTicketInfo(data, notes) {
     'noTrial': noTrial,
     'canada': data.ticket.tags.includes('canada'),
   };
-  // console.log ("here are the tags");
-  // console.log (data.ticket.tags);
-  // console.log (data);
 
   var source = $("#ticket-template").html();
   var template = Handlebars.compile(source);
@@ -172,7 +171,3 @@ function updateTicketInfo(tickets) {
     $("#open-ticket-content").html(openTicketsHtml);
   }
 }
-
-
-
-
