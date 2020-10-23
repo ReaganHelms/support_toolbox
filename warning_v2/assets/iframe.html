@@ -4,8 +4,9 @@
     <link href="https://cdn.jsdelivr.net/bootstrap/2.3.2/css/bootstrap.min.css" rel="stylesheet">
     <link href="main.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/handlebarsjs/4.0.8/handlebars.min.js"></script>
     <!---- js for app checkr --->
-    <script src="https://static.zdassets.com/zendesk_app_framework_sdk/2.0/zaf_sdk.min.js"></script>
+    <script type="text/javascript" src="https://assets.zendesk.com/apps/sdk/2.0/zaf_sdk.js"></script>
   </head>
   <body>
  
@@ -16,19 +17,17 @@
         <button class="tablink" onclick="openTab(event, 'apps')">Mobile Apps</button>
       </div>
       <!--- end nav --->  
-      
-      <!--- begin customer div --->
       <br/>
+      <!--- begin customer div --->
       <div id="customer" class="tab-content" style="display:inline;">
-      <!-- Ticket Requester Content-->
         <div id="requester-content"></div>
         <div id="open-ticket-content"></div>
         <div id="ticket-content"></div>
         <div id="notes-content"></div>
       </div>
 
-    <!--- end customer div --->
-    <!--- begin mobile apps div --->
+      <!--- end customer div --->
+      <!--- begin mobile apps div --->
       <div id="apps" class="tab-content" style="display:none">
         <div class="container">
           <h4><center>Current Production Version</center></h4>
@@ -73,8 +72,12 @@
           <button type="button" class="btn btn-primary btn-sm" onclick="clearLocalStorage()">Manually Refresh Data</button></center>
         </div>
       </div>
+
+      <!--- JS files -->
       <script type="text/javascript" src="main.js"></script>
       <script language="javascript" type="text/javascript" src="app-ver.js"></script>
+
+      <!-- Handlebar Templates-->
       <script id="requester-template" type="text/x-handlebars-template">
         <div class="header">
           <div class="icon_container">
@@ -188,9 +191,6 @@
       <script id="error-template" type="text/x-handlebars-template">
         <p>{{status}} - {{statusText}} error. Please report a bug at the link below.</p>
       </script>
-
-      <script src="https://cdn.jsdelivr.net/handlebarsjs/4.0.8/handlebars.min.js"></script>
-      <script type="text/javascript" src="https://assets.zendesk.com/apps/sdk/2.0/zaf_sdk.js"></script>
     </div>
   </body>
 </html>
