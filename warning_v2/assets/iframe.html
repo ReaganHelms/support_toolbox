@@ -22,7 +22,7 @@
       <div id="customer" class="tab-content" style="display:inline;">
         <div id="requester-content"></div>
         <div id="alerts-content"></div>
-        <div id="ticket-content"></div>
+        <div id="trial-content"></div>
         <div id="notes-content"></div>
       </div>
 
@@ -97,73 +97,65 @@
       </script>
 
       <script id="warnings" type="text/x-handlebars-template">
-        <button id="display-warnings" class="btn">Show/Hide Warnings</button>
+        <button id="display-warnings" class="btn btn-primary">Show/Hide Warnings</button>
 
         <div id="warnings-content">
           {{# if otherRecentTickets}}
             <div class="warning alert alert-danger" role="alert">This user has other recent tickets!</div>
           {{/if}}
           {{#if unicorn}}
-            <div class="alert alert-danger warning" role="alert">🦄 is a Unicorn 🦄</div>
-          {{/if}}
-          {{#if vip}}
-            <div class="alert alert-danger warning" role="alert">🏆 is a VIP 🏆</div>
-          {{/if}}
-          {{#if power_user}}
-            <div class="alert alert-danger warning" role="alert">🏋️ is a Power User 🏋️‍</div>
-          {{/if}}
-          {{#if requested_feature}}
-            <div class="alert alert-danger warning" role="alert">💡 has Requested a Feature 💡</div>
-          {{/if}}
-          {{#if beta}}
-            <div class="alert alert-danger warning" role="alert">🤓 is in the Beta Group 🤓</div>
-          {{/if}}
-          {{#if canada}}
-            <div class="alert alert-danger warning" role="alert">🇨🇦 Eh! 🇨🇦</div>
-          {{/if}}
-          {{#if pcu}}
-            <div class="alert alert-danger warning" role="alert">🎓 has come to PCU 🎓</div>
-          {{/if}}
-          {{#if myplanningcenter}}
-            <div class="alert alert-danger warning">💖 My Planning Center 💖</div>
-          {{/if}}
-          {{#if triage}}
-            <div class="alert alert-danger warning" role="alert">Ticket needs triaged.</div>
+            <div class="alert alert-warning warning" role="alert">🦄 is a Unicorn 🦄</div>
           {{/if}}
           {{#if attachment}}
-            <div class="alert alert-danger warning" role="alert">Customer attached files</div>
+            <div class="alert alert-success warning" role="alert">Customer attached files</div>
+          {{/if}}
+          {{#if vip}}
+            <div class="alert alert-success warning" role="alert">🏆 is a VIP 🏆</div>
+          {{/if}}
+          {{#if power_user}}
+            <div class="alert alert-success warning" role="alert">🏋️ is a Power User 🏋️‍</div>
+          {{/if}}
+          {{#if requested_feature}}
+            <div class="alert alert-info warning" role="alert">💡 has Requested a Feature 💡</div>
+          {{/if}}
+          {{#if triage}}
+            <div class="alert alert-info warning" role="alert">Ticket needs triaged.</div>
+          {{/if}}
+          {{#if beta}}
+            <div class="alert alert-info warning" role="alert">🤓 is in the Beta Group 🤓</div>
+          {{/if}}
+          {{#if canada}}
+            <div class="alert alert-info warning" role="alert">🇨🇦 Eh! 🇨🇦</div>
           {{/if}}
         </div>
       </script>
 
-      <script id="ticket-template" type="text/x-handlebars-template">
+      <script id="trials-template" type="text/x-handlebars-template">
 
         <!-- trials -->
-        {{#unless noTrial}}
-          <div class="trials">
-            <strong>Trials</strong>
-            <div class="flexbox">
-              {{#if CalendarTrial}}
-                <img class="trial_icon" src="product_icons/icon_calendar.png">
-              {{/if}}
-              {{#if Check-InsTrial}}
-                  <img class="trial_icon" src="product_icons/icon_check-ins.png">
-              {{/if}}
-              {{#if GivingTrial}}
-                <img class="trial_icon" src="product_icons/icon_giving.png">
-              {{/if}}
-              {{#if GroupsTrial}}
-                <img class="trial_icon" src="product_icons/icon_groups.png">
-              {{/if}}
-              {{#if RegistrationsTrial}}
-                <img class="trial_icon" src="product_icons/icon_registrations.png">
-              {{/if}}
-              {{#if ServicesTrial}}
-                <img class="trial_icon" src="product_icons/icon_services.png">
-              {{/if}}
-            </div>
+        <div class="trials">
+          <strong>Trials</strong>
+          <div class="flexbox">
+            {{#if CalendarTrial}}
+              <img class="trial_icon" src="product_icons/icon_calendar.png">
+            {{/if}}
+            {{#if Check-InsTrial}}
+                <img class="trial_icon" src="product_icons/icon_check-ins.png">
+            {{/if}}
+            {{#if GivingTrial}}
+              <img class="trial_icon" src="product_icons/icon_giving.png">
+            {{/if}}
+            {{#if GroupsTrial}}
+              <img class="trial_icon" src="product_icons/icon_groups.png">
+            {{/if}}
+            {{#if RegistrationsTrial}}
+              <img class="trial_icon" src="product_icons/icon_registrations.png">
+            {{/if}}
+            {{#if ServicesTrial}}
+              <img class="trial_icon" src="product_icons/icon_services.png">
+            {{/if}}
           </div>
-        {{/unless}}
+        </div>
         <!-- user warnings -->
       </script>
 

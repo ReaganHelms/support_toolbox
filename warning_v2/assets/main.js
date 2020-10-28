@@ -21,7 +21,7 @@ $(function() {
   
   client.invoke('resize', {
     width: '100%',
-    height: '800px'
+    height: '325px'
   })
 
   client.get('ticket').then((data) => {
@@ -50,7 +50,7 @@ async function showInfo(ticket) {
   // Find Warnings to Display
   let hasRecentOpenOrNewTickets = await findNewAndOpenTicketCount(requester_data.email) > 1 ? true : false
 
-  if(ticket.tags.join().match(/unicorn|vip|power_user|requested_feature|beta|pcu|myplanningcenter|to_be_triaged|customer_attachment|canada/g) || requester_data.notes != null || hasRecentOpenOrNewTickets) { 
+  if(ticket.tags.join().match(/unicorn|vip|power_user|requested_feature|beta|to_be_triaged|customer_attachment|canada/g) || hasRecentOpenOrNewTickets) { 
     let warning_data = {
       'otherRecentTickets': hasRecentOpenOrNewTickets,
       'unicorn': ticket.tags.includes('unicorn'),
@@ -58,8 +58,6 @@ async function showInfo(ticket) {
       'power_user': ticket.tags.includes('power_user'),
       'requested_feature': ticket.tags.includes('requested_feature'),
       'beta': ticket.tags.includes('beta'),
-      'pcu': ticket.tags.includes('pcu'),
-      'myplanningcenter': ticket.tags.includes('myplanningcenter'),
       'triage': ticket.tags.includes('to_be_triaged'),
       'attachment': ticket.tags.includes('customer_attachment'),
       'canada': ticket.tags.includes('canada'),
@@ -76,28 +74,24 @@ async function showInfo(ticket) {
     })
   }
 
-  var noTrial = true
   if(ticket.tags.join().match(/check_ins_trial|giving_trial|groups_trial|registrations_trial|calendar_trial|resources_trial|services_trial/g)) { 
-    noTrial = false
+    var ticket_data = {
+      'id': ticket.id,
+      'tags': ticket.tags,
+      'created_at': formatDate(ticket.created_at),
+      'CalendarTrial': ticket.tags.includes('resources_trial') || ticket.tags.includes('calendar_trial'),
+      'Check-InsTrial': ticket.tags.includes('check_ins_trial'),
+      'GivingTrial': ticket.tags.includes('giving_trial'),
+      'GroupsTrial': ticket.tags.includes('groups_trial'),
+      'RegistrationsTrial': ticket.tags.includes('registrations_trial'),
+      'ServicesTrial': ticket.tags.includes('services_trial'),
+    };
+  
+    var source = $("#trials-template").html();
+    var template = Handlebars.compile(source);
+    var html = template(ticket_data);
+    $("#trial-content").html(html);
   }
-
-  var ticket_data = {
-    'id': ticket.id,
-    'tags': ticket.tags,
-    'created_at': formatDate(ticket.created_at),
-    'CalendarTrial': ticket.tags.includes('resources_trial') || ticket.tags.includes('calendar_trial'),
-    'Check-InsTrial': ticket.tags.includes('check_ins_trial'),
-    'GivingTrial': ticket.tags.includes('giving_trial'),
-    'GroupsTrial': ticket.tags.includes('groups_trial'),
-    'RegistrationsTrial': ticket.tags.includes('registrations_trial'),
-    'ServicesTrial': ticket.tags.includes('services_trial'),
-    'noTrial': noTrial,
-  };
-
-  var source = $("#ticket-template").html();
-  var template = Handlebars.compile(source);
-  var html = template(ticket_data);
-  $("#ticket-content").html(html);
 }
 
 function showError(response) {
