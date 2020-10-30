@@ -129,3 +129,8 @@
 #display-warnings {
   margin-top: 5px;
 }
+
+/* Alerts from bootstrap have more padding on the left than the right for some reason... */
+.alert {
+  padding-right: 14px;
+}
