@@ -136,6 +136,58 @@
 }
 
 /* Guru search */
-#guru-seach {
+#guru-search {
   margin-top: 5px;
+  padding-top: 5px;
+  border-top: solid 1px #c9c9c9;
+}
+
+#guru-header {
+  display: -webkit-inline-box;
+}
+
+#guru-header .icon {
+  padding-top: 6px;
+  padding-right: 6px;
+}
+
+.ais-SearchBox {
+  width: 260px;
+}
+
+.guru-search-result {
+  width: 100%;
+  margin-top: 0.5rem;
+  height: 2rem;
+  padding-top: 5px;
+  padding-left: 5px;
+  display: inline-flex;
+  overflow: hidden;
+}
+
+.ais-SearchBox-form {
+  margin-bottom: 5px;
+}
+
+.guru-icon {
+  width: 16px;
+  padding-right: 5px;
+  padding-top: 3px;
+}
+
+.guru-card-icon {
+  width: 20px;
+}
+
+.guru-card-link {
+  width: 270px;
+  margin-top: 2px;
+}
+
+.ais-SearchBox-form .guru-search-input {
+  padding-left: 25px;
+}
+
+.ais-SearchBox-form .ais-SearchBox-submit {
+  top: 41%;
 }

@@ -2,9 +2,24 @@
   <head>
     <meta charset="utf-8">
     <link href="https://cdn.jsdelivr.net/bootstrap/2.3.2/css/bootstrap.min.css" rel="stylesheet">
-    <link href="main.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/handlebarsjs/4.0.8/handlebars.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/instantsearch.css@7/themes/algolia-min.css"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/algoliasearch@4.0.0/dist/algoliasearch-lite.umd.js"
+      integrity="sha256-MfeKq2Aw9VAkaE9Caes2NOxQf6vUa8Av0JqcUXUGkd0="
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/instantsearch.js@4.0.0/dist/instantsearch.production.min.js"
+      integrity="sha256-6S7q0JJs/Kx4kb/fv0oMjS855QTz5Rc2hh9AkIUjUsk="
+      crossorigin="anonymous"
+    ></script>
+    <link href="main.css" rel="stylesheet">
+
     <!---- js for app checkr --->
     <script type="text/javascript" src="https://assets.zendesk.com/apps/sdk/2.0/zaf_sdk.js"></script>
   </head>
@@ -24,9 +39,13 @@
         <div id="alerts-content"></div>
         <div id="trial-content"></div>
         <div id="notes-content"></div>
-        <div id="guru-seach">
+        <div id="guru-search">
           <div id="guru-header">
             <img class="icon" src="images/guru-icon.png" />
+            <div id="search-box" class="ais-SearchBox"></div>
+          </div>
+          <div id="search-results">
+            <div id="hits"></div>
           </div>
         </div>
       </div>
