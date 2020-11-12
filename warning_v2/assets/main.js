@@ -14,17 +14,10 @@ function openTab(evt, tabName) {
   evt.currentTarget.className += " w3-red";
 }
 
-let client = null
-let algoliaId = ''
-let algoliaKey = ''
+var client = null
 
 $(function() {
   client = ZAFClient.init();
-
-  client.metadata().then(function(metadata) {
-    algoliaId = metadata.settings.algoliaId
-    algoliaKey = metadata.settings.algoliaKey
-  });
   
   client.invoke('resize', {
     width: '100%',
@@ -33,7 +26,6 @@ $(function() {
 
   client.get('ticket').then((data) => {
     showInfo(data.ticket)
-    setupAlgolia()
   }, showError)
 });
 
@@ -137,102 +129,4 @@ function findNewAndOpenTicketCount(email) {
   return client.request(settings).then(function(data) {
     return data.count
   }, showError);
-}
-
-// Guru search
-function setupAlgolia() {
-  const searchClient = algoliasearch(algoliaId, algoliaKey);
-  const resultTemplate = {
-    item: `
-      <div class="guru-card-icon">
-        <img class= "guru-icon" src={{iconUrl}} />
-      </div>
-      <div class="guru-card-link">
-        <a href='https://app.getguru.com/card/{{slug}}' target="_blank">{{truncName}}</a>
-      </div>
-    `,
-  }
-
-  const search = instantsearch({
-    indexName: 'guru',
-    searchClient,
-    routing: true
-  })
-  
-  search.addWidgets([
-    instantsearch.widgets.configure({
-      hitsPerPage: 10,
-    }),
-
-    instantsearch.widgets.searchBox({
-      container: '#search-box',
-      cssClasses: {
-        input: 'guru-search-input',
-      }
-    }),
-
-    instantsearch.widgets.hits({
-      transformItems(items) {
-        return items.map(item => ({
-          ...item,
-          truncName: truncate(item.title),
-          iconUrl: productIconUrl(item.board)
-        }))
-      },
-      container: '#hits',
-      templates: resultTemplate,
-      cssClasses: {item: 'guru-search-result'},
-    })
-  ])
-
-  function truncate(str) {
-    return str.length >= 32 ? `${str.slice(0, 32)}...` : str
-  }
-
-  
-  search.start();
-
-}
-
-function productIconUrl(brand) {
-  switch(brand) {
-    case 'Accounts':
-      return '/product_icons/icon_accounts.png'
-      break;
-    case 'Calendar':
-      return '/product_icons/icon_calendar.png'
-      break;
-    case 'Check-Ins':
-      return '/product_icons/icon_check-ins.png'
-      break;
-    case 'Church Center':
-      return '/product_icons/icon_church_center.png'
-      break;
-    case 'Giving':
-      return '/product_icons/icon_giving.png'
-      break;
-    case 'Groups':
-      return '/product_icons/icon_groups.png'
-      break;
-    case 'Music Stand':
-      return '/product_icons/icon_music_stand.png'
-      break;
-    case 'People':
-      return '/product_icons/icon_people_app.png'
-      break;
-    case 'Projector':
-      return '/product_icons/icon_projector.png'
-      break;
-    case 'Publishing':
-      return '/product_icons/icon_publishing.png'
-      break;
-    case 'Registrations':
-      return '/product_icons/icon_registrations.png'
-      break;
-    case 'Services':
-      return '/product_icons/icon_services.png'
-      break;
-    default:
-      return '/images/guru-icon.png'
-  }
 }
