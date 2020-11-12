@@ -2,9 +2,24 @@
   <head>
     <meta charset="utf-8">
     <link href="https://cdn.jsdelivr.net/bootstrap/2.3.2/css/bootstrap.min.css" rel="stylesheet">
-    <link href="main.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/handlebarsjs/4.0.8/handlebars.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/instantsearch.css@7/themes/algolia-min.css"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/algoliasearch@4.0.0/dist/algoliasearch-lite.umd.js"
+      integrity="sha256-MfeKq2Aw9VAkaE9Caes2NOxQf6vUa8Av0JqcUXUGkd0="
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/instantsearch.js@4.0.0/dist/instantsearch.production.min.js"
+      integrity="sha256-6S7q0JJs/Kx4kb/fv0oMjS855QTz5Rc2hh9AkIUjUsk="
+      crossorigin="anonymous"
+    ></script>
+    <link href="main.css" rel="stylesheet">
+
     <!---- js for app checkr --->
     <script type="text/javascript" src="https://assets.zendesk.com/apps/sdk/2.0/zaf_sdk.js"></script>
   </head>
@@ -21,9 +36,18 @@
       <!--- begin customer div --->
       <div id="customer" class="tab-content" style="display:inline;">
         <div id="requester-content"></div>
-        <div id="open-ticket-content"></div>
-        <div id="ticket-content"></div>
+        <div id="alerts-content"></div>
+        <div id="trial-content"></div>
         <div id="notes-content"></div>
+        <div id="guru-search">
+          <div id="guru-header">
+            <img class="icon" src="images/guru-icon.png" />
+            <div id="search-box" class="ais-SearchBox"></div>
+          </div>
+          <div id="search-results">
+            <div id="hits"></div>
+          </div>
+        </div>
       </div>
 
       <!--- end customer div --->
@@ -96,88 +120,67 @@
         </div>
       </script>
 
-      <script id="open-tickets" type="text/x-handlebars-template">
-        <div id="recent-tickets-alert" class="alert alert-danger" role="alert">
-          This user has other recent tickets!
+      <script id="warnings" type="text/x-handlebars-template">
+        <button id="display-warnings" class="btn btn-primary">Show/Hide Warnings</button>
+
+        <div id="warnings-content">
+          {{# if otherRecentTickets}}
+            <div class="warning alert alert-danger" role="alert">This user has other recent tickets!</div>
+          {{/if}}
+          {{#if unicorn}}
+            <div class="alert alert-warning warning" role="alert">🦄 is a Unicorn 🦄</div>
+          {{/if}}
+          {{#if attachment}}
+            <div class="alert alert-success warning" role="alert">Customer attached files</div>
+          {{/if}}
+          {{#if vip}}
+            <div class="alert alert-success warning" role="alert">🏆 is a VIP 🏆</div>
+          {{/if}}
+          {{#if power_user}}
+            <div class="alert alert-success warning" role="alert">🏋️ is a Power User 🏋️‍</div>
+          {{/if}}
+          {{#if requested_feature}}
+            <div class="alert alert-info warning" role="alert">💡 has Requested a Feature 💡</div>
+          {{/if}}
+          {{#if triage}}
+            <div class="alert alert-info warning" role="alert">Ticket needs triaged.</div>
+          {{/if}}
+          {{#if beta}}
+            <div class="alert alert-info warning" role="alert">🤓 is in the Beta Group 🤓</div>
+          {{/if}}
+          {{#if canada}}
+            <div class="alert alert-info warning" role="alert">🇨🇦 Eh! 🇨🇦</div>
+          {{/if}}
         </div>
       </script>
 
-      <script id="ticket-template" type="text/x-handlebars-template">
+      <script id="trials-template" type="text/x-handlebars-template">
 
         <!-- trials -->
-        {{#unless noTrial}}
-          <div class="trials">
-            <strong>Trials</strong>
-            <div class="flexbox">
-              {{#if CalendarTrial}}
-                <img class="trial_icon" src="product_icons/icon_calendar.png">
-              {{/if}}
-              {{#if Check-InsTrial}}
-                  <img class="trial_icon" src="product_icons/icon_check-ins.png">
-              {{/if}}
-              {{#if GivingTrial}}
-                <img class="trial_icon" src="product_icons/icon_giving.png">
-              {{/if}}
-              {{#if GroupsTrial}}
-                <img class="trial_icon" src="product_icons/icon_groups.png">
-              {{/if}}
-              {{#if RegistrationsTrial}}
-                <img class="trial_icon" src="product_icons/icon_registrations.png">
-              {{/if}}
-              {{#if ServicesTrial}}
-                <img class="trial_icon" src="product_icons/icon_services.png">
-              {{/if}}
-            </div>
-          </div>
-        {{/unless}}
-        <!-- user warnings -->
-        {{#if unicorn}}
-          <div class="title">🦄 is a Unicorn 🦄</div>
-        {{/if}}
-
-        {{#if vip}}
-          <div class="title">🏆 is a VIP 🏆</div>
-        {{/if}}
-
-        {{#if power_user}}
-          <div class="title">🏋️ is a Power User 🏋️‍</div>
-        {{/if}}
-
-        {{#if requested_feature}}
-          <div class="title">💡 has Requested a Feature 💡</div>
-        {{/if}}
-
-        {{#if beta}}
-          <div class="title">🤓 is in the Beta Group 🤓</div>
-        {{/if}}
-
-        {{#if canada}}
-          <div class="title">🇨🇦 Eh! 🇨🇦</div>
-        {{/if}}
-
-        {{#if pcu}}
-          <div class="title">🎓 has come to PCU 🎓</div>
-        {{/if}}
-
-        {{#if myplanningcenter}}
-          <div class="title">💖 My Planning Center 💖</div>
-        {{/if}}
-        
-        <!-- ticket warnings -->
+        <div class="trials">
+          <strong>Trials</strong>
           <div class="flexbox">
-          {{#if triage}}
-            <img class="pico" src="./triage.png">
-          {{/if}}
-
-          {{#if attachment}}
-                <img class="pico" src="./attachment.png">
-          {{/if}}
-
-        <!-- no warning  -->
-            {{#if noWarning }}
-                <img class="pico" src="images/allClear.png">
+            {{#if CalendarTrial}}
+              <img class="trial_icon" src="product_icons/icon_calendar.png">
+            {{/if}}
+            {{#if Check-InsTrial}}
+                <img class="trial_icon" src="product_icons/icon_check-ins.png">
+            {{/if}}
+            {{#if GivingTrial}}
+              <img class="trial_icon" src="product_icons/icon_giving.png">
+            {{/if}}
+            {{#if GroupsTrial}}
+              <img class="trial_icon" src="product_icons/icon_groups.png">
+            {{/if}}
+            {{#if RegistrationsTrial}}
+              <img class="trial_icon" src="product_icons/icon_registrations.png">
+            {{/if}}
+            {{#if ServicesTrial}}
+              <img class="trial_icon" src="product_icons/icon_services.png">
             {{/if}}
           </div>
+        </div>
+        <!-- user warnings -->
       </script>
 
       <script id="notes-template" type="text/x-handlebars-template">
