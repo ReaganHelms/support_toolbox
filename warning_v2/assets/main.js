@@ -147,8 +147,8 @@ function setupAlgolia() {
       <div class="guru-card-icon">
         <img class= "guru-icon" src={{iconUrl}} />
       </div>
-      <div class="guru-card-link">
-        <a href='https://app.getguru.com/card/{{slug}}' target="_blank">{{truncName}}</a>
+      <div class="guru-card-link ">
+        <a {{^trusted}}class="not-trusted"{{/trusted}}href='https://app.getguru.com/card/{{slug}}' target="_blank">{{truncName}}</a>
       </div>
     `,
   }
@@ -189,9 +189,7 @@ function setupAlgolia() {
     return str.length >= 32 ? `${str.slice(0, 32)}...` : str
   }
 
-  
   search.start();
-
 }
 
 function productIconUrl(brand) {

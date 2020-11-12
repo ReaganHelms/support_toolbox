@@ -191,3 +191,17 @@
 .ais-SearchBox-form .ais-SearchBox-submit {
   top: 41%;
 }
+
+.ais-SearchBox-reset {
+  right: -1.7rem;
+  top: 1rem;
+}
+
+.ais-SearchBox-loadingIndicator {
+  right: -1.7rem;
+  top: 1rem;
+}
+
+.not-trusted {
+  color: red;
+}
