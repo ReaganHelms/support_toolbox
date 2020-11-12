@@ -14,65 +14,35 @@ function openTab(evt, tabName) {
   evt.currentTarget.className += " w3-red";
 }
 
+let client = null
+let algoliaId = ''
+let algoliaKey = ''
 
 $(function() {
-  var client = ZAFClient.init();
-  client.invoke('resize', { width: '100%', height: '325px' });
+  client = ZAFClient.init();
+
+  client.metadata().then(function(metadata) {
+    algoliaId = metadata.settings.algoliaId
+    algoliaKey = metadata.settings.algoliaKey
+  });
   
-  client.get('ticket.requester.id').then(
-    function(data) {
-      var user_id = data['ticket.requester.id'];
-      requestUserInfo(client, user_id);
-    }
-  );
+  client.invoke('resize', {
+    width: '100%',
+    height: '325px'
+  })
+
+  client.get('ticket').then((data) => {
+    showInfo(data.ticket)
+    setupAlgolia()
+  }, showError)
 });
 
-
-function requestUserInfo(client, id) {
-  var settings = {
-    url: '/api/v2/users/' + id + '.json',
-    type:'GET',
-    dataType: 'json',
-  };
-
-  client.request(settings).then(function(data) { showInfo(client, data) }, showError);
-}
-
-function requestTicketInfo(client, id, notes) {
-  var settings = {
-    url: '/api/v2/tickets/' + id + '.json',
-    type:'GET',
-    dataType: 'json',
-  };
-
-  client.request(settings).then(function(data) { showTicketInfo(data, notes) }, showError);
-}
-
-function findNewAndOpenTickets(client, email) {
-  var d = new Date();
-  var twoDaysAgo = new Date(d.setDate(d.getDate() - 2));
-  var searchDate =  `${twoDaysAgo.getFullYear()}-${("0" + (twoDaysAgo.getMonth() + 1)).slice(-2)}-${("0" + twoDaysAgo.getDate()).slice(-2)}`;
-  var settings = {
-    url: `/api/v2/search.json?query=created>${searchDate} requester:${email} type:ticket`,
-    type:'GET',
-    dataType: 'json',
-  }
-
-  client.request(settings).then(function(data) {
-    updateTicketInfo(data)
-  }, showError);
-}
-
-function showInfo(client, data) {
-
+async function showInfo(ticket) {  
+  // Find and display user data
   var requester_data = {
-    'name': data.user.name,
-    'tags': data.user.tags,
-    'email': data.user.email,
-    'created_at': formatDate(data.user.created_at),
-    'last_login_at': formatDate(data.user.last_login_at),
-    'notes': data.user.notes,
-    
+    'name': ticket.requester.name,
+    'email': ticket.requester.email,
+    'notes': ticket.requester.notes,    
   };
 
   var source = $("#requester-template").html();  
@@ -85,14 +55,51 @@ function showInfo(client, data) {
   var notesHtml = notesTemplate(requester_data);
   $("#notes-content").html(notesHtml);
 
-  findNewAndOpenTickets(client, data.user.email);
+  // Find Warnings to Display
+  let hasRecentOpenOrNewTickets = await findNewAndOpenTicketCount(requester_data.email) > 1 ? true : false
 
-  client.get('ticket.id').then(
-    function(data) {
-      var ticket_id = data['ticket.id'];
-      requestTicketInfo(client, ticket_id, requester_data.notes);
+  if(ticket.tags.join().match(/unicorn|vip|power_user|requested_feature|beta|to_be_triaged|customer_attachment|canada/g) || hasRecentOpenOrNewTickets) { 
+    let warning_data = {
+      'otherRecentTickets': hasRecentOpenOrNewTickets,
+      'unicorn': ticket.tags.includes('unicorn'),
+      'vip': ticket.tags.includes('vip'),
+      'power_user': ticket.tags.includes('power_user'),
+      'requested_feature': ticket.tags.includes('requested_feature'),
+      'beta': ticket.tags.includes('beta'),
+      'triage': ticket.tags.includes('to_be_triaged'),
+      'attachment': ticket.tags.includes('customer_attachment'),
+      'canada': ticket.tags.includes('canada'),
     }
-  );
+
+    // Show warnings
+    var openTicketsSource = $("#warnings").html();
+    var openTicketsTemplate = Handlebars.compile(openTicketsSource);
+    var openTicketsHtml = openTicketsTemplate(warning_data);
+    $("#alerts-content").html(openTicketsHtml);
+
+    $('#display-warnings').click(function() {
+      $('#warnings-content').toggle()
+    })
+  }
+
+  if(ticket.tags.join().match(/check_ins_trial|giving_trial|groups_trial|registrations_trial|calendar_trial|resources_trial|services_trial/g)) { 
+    var ticket_data = {
+      'id': ticket.id,
+      'tags': ticket.tags,
+      'created_at': formatDate(ticket.created_at),
+      'CalendarTrial': ticket.tags.includes('resources_trial') || ticket.tags.includes('calendar_trial'),
+      'Check-InsTrial': ticket.tags.includes('check_ins_trial'),
+      'GivingTrial': ticket.tags.includes('giving_trial'),
+      'GroupsTrial': ticket.tags.includes('groups_trial'),
+      'RegistrationsTrial': ticket.tags.includes('registrations_trial'),
+      'ServicesTrial': ticket.tags.includes('services_trial'),
+    };
+  
+    var source = $("#trials-template").html();
+    var template = Handlebars.compile(source);
+    var html = template(ticket_data);
+    $("#trial-content").html(html);
+  }
 }
 
 function showError(response) {
@@ -103,53 +110,6 @@ function showError(response) {
   var source = $("#error-template").html();
   var template = Handlebars.compile(source);
   var html = template(error_data);
-  $("#ticket-content").html(html);
-}
-
-
-function showTicketInfo(data, notes) {
-  var noWarning = true;
-
-  if(data.ticket.tags.join().match(/unicorn|vip|power_user|requested_feature|beta|pcu|myplanningcenter|to_be_triaged|customer_attachment/g) || notes != null) { 
-    noWarning = false;
-  }
-
-   var noTrial = true;
-
-  if(data.ticket.tags.join().match(/check_ins_trial|giving_trial|groups_trial|registrations_trial|calendar_trial|resources_trial|services_trial/g)) { 
-    noTrial = false;
-  }
-
-  var ticket_data = {
-    'id': data.ticket.id,
-    'tags': data.ticket.tags,
-    'created_at': formatDate(data.ticket.created_at),
-    'unicorn': data.ticket.tags.includes('unicorn'),
-    'vip': data.ticket.tags.includes('vip'),
-    'power_user': data.ticket.tags.includes('power_user'),
-    'requested_feature': data.ticket.tags.includes('requested_feature'),
-    'beta': data.ticket.tags.includes('beta'),
-    'pcu': data.ticket.tags.includes('pcu'),
-    'myplanningcenter': data.ticket.tags.includes('myplanningcenter'),
-    'triage': data.ticket.tags.includes('to_be_triaged'),
-    'attachment': data.ticket.tags.includes('customer_attachment'),
-    'noWarning': noWarning,
-    'CalendarTrial': data.ticket.tags.includes('resources_trial') || data.ticket.tags.includes('calendar_trial'),
-    'Check-InsTrial': data.ticket.tags.includes('check_ins_trial'),
-    'GivingTrial': data.ticket.tags.includes('giving_trial'),
-    'GroupsTrial': data.ticket.tags.includes('groups_trial'),
-    'RegistrationsTrial': data.ticket.tags.includes('registrations_trial'),
-    'ServicesTrial': data.ticket.tags.includes('services_trial'),
-    'noTrial': noTrial,
-    'canada': data.ticket.tags.includes('canada'),
-  };
-  // console.log ("here are the tags");
-  // console.log (data.ticket.tags);
-  // console.log (data);
-
-  var source = $("#ticket-template").html();
-  var template = Handlebars.compile(source);
-  var html = template(ticket_data);
   $("#ticket-content").html(html);
 }
 
@@ -164,15 +124,115 @@ function formatDate(date) {
   return date;
 }
 
-function updateTicketInfo(tickets) {
-  if(tickets.count > 1){
-    var openTicketsSource = $("#open-tickets").html();
-    var openTicketsTemplate = Handlebars.compile(openTicketsSource);
-    var openTicketsHtml = openTicketsTemplate({'numberOfOpenTickets': tickets.count});
-    $("#open-ticket-content").html(openTicketsHtml);
+function findNewAndOpenTicketCount(email) {
+  var d = new Date();
+  var twoDaysAgo = new Date(d.setDate(d.getDate() - 2));
+  var searchDate =  `${twoDaysAgo.getFullYear()}-${("0" + (twoDaysAgo.getMonth() + 1)).slice(-2)}-${("0" + twoDaysAgo.getDate()).slice(-2)}`;
+  var settings = {
+    url: `/api/v2/search.json?query=created>${searchDate} requester:${email} type:ticket`,
+    type:'GET',
+    dataType: 'json',
   }
+
+  return client.request(settings).then(function(data) {
+    return data.count
+  }, showError);
 }
 
+// Guru search
+function setupAlgolia() {
+  const searchClient = algoliasearch(algoliaId, algoliaKey);
+  const resultTemplate = {
+    item: `
+      <div class="guru-card-icon">
+        <img class= "guru-icon" src={{iconUrl}} />
+      </div>
+      <div class="guru-card-link">
+        <a href='https://app.getguru.com/card/{{slug}}' target="_blank">{{truncName}}</a>
+      </div>
+    `,
+  }
 
+  const search = instantsearch({
+    indexName: 'guru',
+    searchClient,
+    routing: true
+  })
+  
+  search.addWidgets([
+    instantsearch.widgets.configure({
+      hitsPerPage: 10,
+    }),
 
+    instantsearch.widgets.searchBox({
+      container: '#search-box',
+      cssClasses: {
+        input: 'guru-search-input',
+      }
+    }),
 
+    instantsearch.widgets.hits({
+      transformItems(items) {
+        return items.map(item => ({
+          ...item,
+          truncName: truncate(item.title),
+          iconUrl: productIconUrl(item.board)
+        }))
+      },
+      container: '#hits',
+      templates: resultTemplate,
+      cssClasses: {item: 'guru-search-result'},
+    })
+  ])
+
+  function truncate(str) {
+    return str.length >= 32 ? `${str.slice(0, 32)}...` : str
+  }
+
+  
+  search.start();
+
+}
+
+function productIconUrl(brand) {
+  switch(brand) {
+    case 'Accounts':
+      return '/product_icons/icon_accounts.png'
+      break;
+    case 'Calendar':
+      return '/product_icons/icon_calendar.png'
+      break;
+    case 'Check-Ins':
+      return '/product_icons/icon_check-ins.png'
+      break;
+    case 'Church Center':
+      return '/product_icons/icon_church_center.png'
+      break;
+    case 'Giving':
+      return '/product_icons/icon_giving.png'
+      break;
+    case 'Groups':
+      return '/product_icons/icon_groups.png'
+      break;
+    case 'Music Stand':
+      return '/product_icons/icon_music_stand.png'
+      break;
+    case 'People':
+      return '/product_icons/icon_people_app.png'
+      break;
+    case 'Projector':
+      return '/product_icons/icon_projector.png'
+      break;
+    case 'Publishing':
+      return '/product_icons/icon_publishing.png'
+      break;
+    case 'Registrations':
+      return '/product_icons/icon_registrations.png'
+      break;
+    case 'Services':
+      return '/product_icons/icon_services.png'
+      break;
+    default:
+      return '/images/guru-icon.png'
+  }
+}
