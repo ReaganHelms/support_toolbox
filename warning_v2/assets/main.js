@@ -19,13 +19,20 @@ var client = null
 $(function () {
   client = ZAFClient.init()
 
+  client.metadata().then(function (metadata) {
+    algoliaId = metadata.settings.algoliaId
+    algoliaKey = metadata.settings.algoliaKey
+  })
+
   client.invoke('resize', {
     width: '100%',
     height: '325px',
   })
 
   client.get('ticket').then((data) => {
-    showInfo(data.ticket)
+    ticket = data.ticket
+    showInfo(ticket)
+    setupAlgolia(ticket.subject)
   }, showError)
 })
 
@@ -151,7 +158,7 @@ function findNewAndOpenTicketCount(email) {
 }
 
 // Guru search
-function setupAlgolia() {
+function setupAlgolia(ticketSubject) {
   const searchClient = algoliasearch(algoliaId, algoliaKey)
   const resultTemplate = {
     item: `
@@ -166,8 +173,12 @@ function setupAlgolia() {
 
   const search = instantsearch({
     indexName: 'guru',
+    initialUiState: {
+      guru: {
+        query: ticketSubject,
+      },
+    },
     searchClient,
-    routing: true,
   })
 
   search.addWidgets([
@@ -180,6 +191,7 @@ function setupAlgolia() {
       cssClasses: {
         input: 'guru-search-input',
       },
+      showReset: false,
     }),
 
     instantsearch.widgets.hits({
