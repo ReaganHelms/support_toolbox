@@ -1,8 +1,4 @@
 {
   "zat_latest": "3.8.1",
-<<<<<<< HEAD
-  "zat_update_check": "2020-11-12"
-=======
   "zat_update_check": "2020-11-20"
->>>>>>> new package to upload
 }
