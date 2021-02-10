@@ -8,5 +8,5 @@ In your command line navigate to the warning_v2 directory and then run
 
 ```
 cd warning_v2
-zat s -c settings.json
+zat s
 ```

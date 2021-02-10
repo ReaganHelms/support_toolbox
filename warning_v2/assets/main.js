@@ -15,16 +15,9 @@ function openTab(evt, tabName) {
 }
 
 let client = null
-let algoliaId = ''
-let algoliaKey = ''
 
 $(function () {
   client = ZAFClient.init()
-
-  client.metadata().then(function (metadata) {
-    algoliaId = metadata.settings.algoliaId
-    algoliaKey = metadata.settings.algoliaKey
-  })
 
   client.invoke('resize', {
     width: '100%',
@@ -161,7 +154,10 @@ function findNewAndOpenTicketCount(email) {
 
 // Guru search
 function setupAlgolia(ticketSubject) {
-  const searchClient = algoliasearch(algoliaId, algoliaKey)
+  const searchClient = algoliasearch(
+    'W72O7YONLW',
+    'b6cbc473ef416d4f4af605337e1a0586'
+  )
   const resultTemplate = {
     item: `
       <div class="guru-card-icon">
