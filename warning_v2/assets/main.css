@@ -80,13 +80,20 @@
 }
 
 .container {
-  width: 100%;
-  display: inline-block;
+  width: 100%;ß
+  display: inline;
   vertical-align: top;
 }
 .app {
   vertical-align: top;
   width: 24%;
+  display: inline-block;
+  text-align: center;
+  padding-bottom: 10px;
+}
+.app_cc {
+  vertical-align: top;
+  width: 48%;
   display: inline-block;
   text-align: center;
   padding-bottom: 10px;
@@ -99,6 +106,7 @@
   background-color: #fff;
   clear: both;
   border-bottom: dotted 1px gray;
+  margin-top: 1px;
 }
 
 .tablink {
