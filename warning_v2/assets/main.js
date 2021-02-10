@@ -64,7 +64,7 @@ async function showInfo(ticket) {
     ticket.tags
       .join()
       .match(
-        /unicorn|vip|power_user|requested_feature|beta|to_be_triaged|customer_attachment|canada/g
+        /unicorn|vip|power_user|requested_feature|beta|to_be_triaged|customer_attachment|canada|swagged_up/g
       ) ||
     hasRecentOpenOrNewTickets
   ) {
@@ -78,6 +78,7 @@ async function showInfo(ticket) {
       triage: ticket.tags.includes('to_be_triaged'),
       attachment: ticket.tags.includes('customer_attachment'),
       canada: ticket.tags.includes('canada'),
+      swag: ticket.tags.includes('swagged_up'),
     }
 
     // Show warnings
